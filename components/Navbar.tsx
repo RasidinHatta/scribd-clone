@@ -35,7 +35,7 @@ const Navbar = () => {
                         <SheetContent side="left" className="w-64 p-4 flex flex-col">
                             <SheetHeader>
                                 <Link href="/" className="font-bold text-lg">
-                                    ScribdClone
+                                    SAMS
                                 </Link>
                             </SheetHeader>
 
@@ -80,7 +80,7 @@ const Navbar = () => {
                     </Sheet>
 
                     <Link href="/" className="font-bold text-lg">
-                        ScribdClone
+                        SAMS
                     </Link>
                 </div>
 
