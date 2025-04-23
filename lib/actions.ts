@@ -1,4 +1,4 @@
-import { schema } from "@/lib/schema";
+import { RegisterSchema } from "@/lib/schemas";
 import { executeAction } from "@/lib/executeAction";
 import db from "@/prisma/prisma";
 
@@ -6,11 +6,26 @@ const signUp = async (formData: FormData) => {
   return executeAction({
     actionFn: async () => {
       const email = formData.get("email");
+      const name = formData.get("name");
       const password = formData.get("password");
-      const validatedData = schema.parse({ email, password });
+      const passwordConfirmation = formData.get("passwordConfirmation");
+
+      const validatedData = RegisterSchema.parse({
+        email,
+        name,
+        password,
+        passwordConfirmation,
+      });
+
+      // Optionally: Check if passwords match
+      if (validatedData.password !== validatedData.passwordConfirmation) {
+        throw new Error("Passwords do not match");
+      }
+
       await db.user.create({
         data: {
-          email: validatedData.email.toLocaleLowerCase(),
+          email: validatedData.email.toLowerCase(),
+          name: validatedData.name,
           password: validatedData.password,
         },
       });

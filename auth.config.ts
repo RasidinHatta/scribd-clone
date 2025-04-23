@@ -1,7 +1,7 @@
 import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { schema } from "./lib/schema";
+import { LoginSchema } from "./lib/schemas";
 import db from "./prisma/prisma";
 
 export default {
@@ -13,7 +13,7 @@ export default {
             password: {}
           },
           authorize: async (credentials) => {
-            const validatedCredetials = schema.parse(credentials)
+            const validatedCredetials = LoginSchema.parse(credentials)
     
             const user = await db.user.findFirst({
               where: {

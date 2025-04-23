@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { signUp } from "@/lib/actions";
-import { auth } from "@/auth";
+import { auth, signIn } from "@/auth";
 import GoogleSignIn from "@/components/auth/GoogleSignIn";
 
 const Page = async () => {
@@ -30,10 +30,21 @@ const Page = async () => {
           "use server";
           const res = await signUp(formData);
           if (res.success) {
-            redirect("/");
+            await signIn("credentials", {
+              email: formData.get("email") as string,  // Pass email and password from the form
+              password: formData.get("password") as string,
+              redirectTo: "/",  // Prevent automatic redirect (handle manually)
+            });
           }
         }}
       >
+        <Input
+          name="name"
+          placeholder="Full Name"
+          type="text"
+          required
+          autoComplete="name"
+        />
         <Input
           name="email"
           placeholder="Email"
@@ -44,6 +55,13 @@ const Page = async () => {
         <Input
           name="password"
           placeholder="Password"
+          type="password"
+          required
+          autoComplete="new-password"
+        />
+        <Input
+          name="passwordConfirmation"
+          placeholder="Confirm Password"
           type="password"
           required
           autoComplete="new-password"
