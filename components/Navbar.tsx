@@ -1,4 +1,4 @@
-"use client"
+"use server"
 
 import Link from 'next/link'
 import React from 'react'
@@ -15,8 +15,11 @@ import {
 } from './ui/sheet'
 import SearchBar from './SearchBar'
 import { SignOut } from './auth/SignOut'
+import { auth } from '@/auth'
 
-const Navbar = () => {
+const Navbar = async () => {
+    const session = await auth()
+    console.log(session?.user?.image)
     return (
         <header className="border-b">
             <div className="container mx-auto flex h-16 items-center justify-between px-4 gap-4">
@@ -49,29 +52,45 @@ const Navbar = () => {
                                 </Button>
 
                                 <div className="flex items-center justify-between">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" className="px-2 py-1.5 flex items-center space-x-2">
-                                                <Avatar className="h-8 w-8">
-                                                    <AvatarImage src="https://github.com/shadcn.png" alt="User" />
-                                                    <AvatarFallback>U</AvatarFallback>
-                                                </Avatar>
-                                                <span>Account</span>
+                                    {session ? (
+                                        <>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                                                        <Avatar className="h-8 w-8">
+                                                            <AvatarImage
+                                                                src={session.user?.image ?? "https://github.com/shadcn.png"}
+                                                                alt="User"
+                                                                width={32}
+                                                                height={32}
+                                                            />
+                                                            <AvatarFallback>U</AvatarFallback>
+                                                        </Avatar>
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent className="w-56" align="end" forceMount>
+                                                    <DropdownMenuItem asChild>
+                                                        <Link href="/profile">Profile</Link>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem asChild>
+                                                        <Link href="/admin">Admin</Link>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem className="text-red-500">
+                                                        <SignOut />
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Button asChild variant="outline">
+                                                <Link href="/login">Login</Link>
                                             </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent className="w-56" align="start" side="top">
-                                            <DropdownMenuItem asChild>
-                                                <Link href="/profile">Profile</Link>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem asChild>
-                                                <Link href="/admin">Admin</Link>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem className="text-red-500">
-                                                <SignOut />
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-
+                                            <Button asChild variant="default">
+                                                <Link href="/register">Register</Link>
+                                            </Button>
+                                        </>
+                                    )}
                                     <div className="ml-2 scale-90">
                                         <ModeToggle />
                                     </div>
@@ -96,28 +115,45 @@ const Navbar = () => {
                         <Link href="/upload">Upload</Link>
                     </Button>
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                                <Avatar className="h-8 w-8">
-                                    <AvatarImage src="https://github.com/shadcn.png" alt="User" />
-                                    <AvatarFallback>U</AvatarFallback>
-                                </Avatar>
+                    {session ? (
+                        <>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                                        <Avatar className="h-8 w-8">
+                                            <AvatarImage
+                                                src={session.user?.image ?? "https://github.com/shadcn.png"}
+                                                alt="User"
+                                                width={32}
+                                                height={32}
+                                            />
+                                            <AvatarFallback>U</AvatarFallback>
+                                        </Avatar>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-56" align="end" forceMount>
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/profile">Profile</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/admin">Admin</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="text-red-500">
+                                        <SignOut />
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </>
+                    ) : (
+                        <>
+                            <Button asChild variant="outline">
+                                <Link href="/login">Login</Link>
                             </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56" align="end" forceMount>
-                            <DropdownMenuItem asChild>
-                                <Link href="/profile">Profile</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link href="/admin">Admin</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-500">
-                                <SignOut />
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-
+                            <Button asChild variant="default">
+                                <Link href="/register">Register</Link>
+                            </Button>
+                        </>
+                    )}
                     <ModeToggle />
                 </nav>
             </div>

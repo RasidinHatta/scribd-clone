@@ -1,1 +1,4 @@
-export const privateRoutes = ["/document"]
+export const privateRoutes = [
+    "/document",
+    "/dashboard"
+]

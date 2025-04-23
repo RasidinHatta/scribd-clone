@@ -1,45 +1,41 @@
 import NextAuth from "next-auth"
-import db from "./prisma/prisma"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { v4 as uuid } from "uuid"
-import { encode as defaultEncode } from "next-auth/jwt";
-import authConfig from "./auth.config"
-
-const adapter = PrismaAdapter(db)
+import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google"
+import { schema } from "./lib/schema";
+import db from "./prisma/prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-    adapter,
-    ...authConfig,
-    callbacks: {
-        async jwt({ token, account }) {
-            if (account?.provider === "credentials") {
-                token.credentials = true;
-            }
-            return token;
-        },
-    },
-    jwt: {
-        encode: async function (params) {
-            if (params.token?.credentials) {
-                const sessionToken = uuid();
+    providers: [
+        Google,
+        Credentials({
+            credentials: {
+                email: {},
+                password: {}
+            },
+            authorize: async (credentials) => {
+                const validatedCredetials = schema.parse(credentials)
 
-                if (!params.token.sub) {
-                    throw new Error("No user ID found in token");
-                }
-
-                const createdSession = await adapter?.createSession?.({
-                    sessionToken: sessionToken,
-                    userId: params.token.sub,
-                    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                const user = await db.user.findFirst({
+                    where: {
+                        email: validatedCredetials.email,
+                        password: validatedCredetials.password,
+                    },
                 });
 
-                if (!createdSession) {
-                    throw new Error("Failed to create session");
+                if (!user) {
+                    throw new Error("Invalid Credentials")
                 }
-
-                return sessionToken;
-            }
-            return defaultEncode(params);
+                return user
+            },
+        })
+    ],
+    callbacks: {
+        authorized: async ({ auth }) => {
+            // Logged in users are authenticated, otherwise redirect to login page
+            return !!auth
         },
     },
+    pages: {
+        signIn: "/login"
+    }
 })
