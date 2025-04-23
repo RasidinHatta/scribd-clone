@@ -14,6 +14,7 @@ import {
     SheetTrigger
 } from './ui/sheet'
 import SearchBar from './SearchBar'
+import { SignOut } from './auth/SignOut'
 
 const Navbar = () => {
     return (
@@ -66,7 +67,7 @@ const Navbar = () => {
                                                 <Link href="/admin">Admin</Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem className="text-red-500">
-                                                Sign Out
+                                                <SignOut />
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -112,7 +113,7 @@ const Navbar = () => {
                                 <Link href="/admin">Admin</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem className="text-red-500">
-                                Sign Out
+                                <SignOut />
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
