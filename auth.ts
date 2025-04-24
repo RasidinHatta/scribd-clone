@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google"
 import { LoginSchema } from "./lib/schemas";
 import db from "./prisma/prisma";
+import bcrypt from "bcryptjs"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -12,29 +13,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 email: {},
                 password: {}
             },
-            authorize: async (credentials) => {
-                const validatedCredetials = LoginSchema.parse(credentials)
+            async authorize(credentials) {
+                const validatedData = LoginSchema.safeParse(credentials)
+                if (!validatedData.success) return null
+
+                const { email, password } = validatedData.data
 
                 const user = await db.user.findFirst({
                     where: {
-                        email: validatedCredetials.email,
-                        password: validatedCredetials.password,
-                    },
-                });
-
-                if (!user) {
-                    throw new Error("Invalid Credentials")
+                        email
+                    }
+                })
+                if (!user || !user.password || !user.email) {
+                    return null
                 }
+
+                const passwordMatch = await bcrypt.compare(password, user.password)
+                if (!passwordMatch) return null
+
                 return user
-            },
+            }
         })
     ],
-    callbacks: {
-        authorized: async ({ auth }) => {
-            // Logged in users are authenticated, otherwise redirect to login page
-            return !!auth
-        },
-    },
     pages: {
         signIn: "/login"
     }

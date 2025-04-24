@@ -1,5 +1,3 @@
-"use server"
-
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
@@ -14,7 +12,7 @@ import {
     SheetTrigger
 } from './ui/sheet'
 import SearchBar from './SearchBar'
-import { SignOut } from './auth/SignOut'
+import { SignOutButton } from './auth/SignOutButton'
 import { auth } from '@/auth'
 
 const Navbar = async () => {
@@ -84,7 +82,7 @@ const Navbar = async () => {
                                                         <Link href="/admin">Admin</Link>
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem className="text-red-500">
-                                                        <SignOut />
+                                                        <SignOutButton />
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
@@ -157,7 +155,7 @@ const Navbar = async () => {
                                         <Link href="/admin">Admin</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem className="text-red-500">
-                                        <SignOut />
+                                        <SignOutButton />
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

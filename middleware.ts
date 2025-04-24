@@ -12,6 +12,11 @@ export default auth(async (req) => {
     const { nextUrl } = req
     const basedUrl = process.env.BASED_URL
     const isPrivateRoutes = privateRoutes.includes(nextUrl.pathname)
+    const isAuthRoute = nextUrl.pathname.includes("/register") || nextUrl.pathname.includes("/login")
+
+    if(isLoggedIn && isAuthRoute) {
+        return Response.redirect(`${basedUrl}`)
+    }
     if (!isLoggedIn && isPrivateRoutes) {
         return Response.redirect(`${basedUrl}/login`)
     }

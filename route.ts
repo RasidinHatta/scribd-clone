@@ -1,4 +1,5 @@
 export const privateRoutes = [
     "/document",
-    "/dashboard"
+    "/dashboard",
+    "/profile"
 ]

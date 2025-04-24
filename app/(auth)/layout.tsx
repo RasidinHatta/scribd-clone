@@ -1,17 +1,21 @@
-import { auth } from "@/auth"; // Adjust import if your auth helper is located elsewhere
-import { redirect } from "next/navigation";
-import type { ReactNode } from "react";
+import React from 'react'
 
-export default async function AuthLayout({ children }: { children: ReactNode }) {
-  const session = await auth();
-
-  if (session) redirect("/"); // Redirect to homepage if already logged in
-
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-mdrounded-2xl shadow-lg p-8">
-        {children}
-      </div>
-    </div>
-  );
+const AuthLayout = ({
+    children
+}: {
+    children: React.ReactNode
+}) => {
+    return (
+        <section className='w-full relative'>
+            {/* Background grid */}
+            <div className="absolute inset-0 -z-10 w-full h-full bg-[linear-gradient(135deg,_#ff6ec4,_#7873f5,_#4ade80),_repeating-linear-gradient(to_right,_rgba(0,0,0,0.1)_0px,_rgba(0,0,0,0.1)_2px,_transparent_2px,_transparent_40px),_repeating-linear-gradient(to_bottom,_rgba(0,0,0,0.1)_0px,_rgba(0,0,0,0.1)_2px,_transparent_2px,_transparent_40px)] bg-[size:auto,_40px_40px,_40px_40px]">
+            </div>
+            {/* Centered content */}
+            <div className="h-screen flex items-center justify-center">
+                {children}
+            </div>
+        </section>
+    )
 }
+
+export default AuthLayout
