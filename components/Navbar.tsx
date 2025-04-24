@@ -37,8 +37,17 @@ const Navbar = async () => {
 
                         <SheetContent side="left" className="w-64 p-4 flex flex-col">
                             <SheetHeader>
-                                <Link href="/" className="font-bold text-lg">
+                                <Link
+                                    href="/"
+                                    className="font-bold text-lg transition-transform transform hover:scale-105 hover:text-primary"
+                                >
                                     SAMS
+                                </Link>
+                                <Link
+                                    href="/community"
+                                    className="text-lg transition-transform transform hover:scale-105 hover:text-primary"
+                                >
+                                    Community
                                 </Link>
                             </SheetHeader>
 
@@ -97,10 +106,20 @@ const Navbar = async () => {
                             </div>
                         </SheetContent>
                     </Sheet>
-
-                    <Link href="/" className="font-bold text-lg">
-                        SAMS
-                    </Link>
+                    <div className='flex gap-4'>
+                        <Link
+                            href="/"
+                            className="font-bold text-lg transition-transform transform hover:scale-105 hover:text-primary"
+                        >
+                            SAMS
+                        </Link>
+                        <Link
+                            href="/community"
+                            className="text-lg transition-transform transform hover:scale-105 hover:text-primary"
+                        >
+                            Community
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Middle: SearchBar - always visible */}

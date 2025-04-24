@@ -1,32 +1,87 @@
-import { AnimatedContainer } from "@/components/animations/AnimatedContainer";
-import DocumentCard from "@/components/DocumentCard"
-import DocumentsEmpty from "@/components/empty-states/DocumentsEmpty";
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+"use client";
+
+import CommunityPage from "@/components/CommunityPage";
+import { useRef } from "react";
+import { useRouter } from "next/navigation";
+import { Separator } from "@/components/ui/separator"; // Import the Separator component
 
 export default function Home() {
-  const mockDocuments = Array(6).fill(0);
+  const communityRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const scrollToCommunity = () => {
+    if (communityRef.current) {
+      communityRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <AnimatedContainer className="container mx-auto py-8 space-y-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Community Documents</h1>
-            <p className="text-muted-foreground">
-              Browse and discuss documents shared by the community
+    <>
+      {/* Hero Section */}
+      <section className="h-screen flex flex-col justify-center items-center px-4 text-center">
+        <h1 className="text-5xl font-extrabold mb-4">Welcome to SAMS</h1>
+        <p className="text-xl mb-6 max-w-2xl">
+          Upload, read, and share documents seamlessly — your digital library, always accessible.
+        </p>
+        <div className="flex gap-4">
+          {/* Get Started Button */}
+          <button
+            onClick={() => router.push("/login")}
+            className="px-6 py-2 rounded-full font-semibold text-foreground bg-background border border-foreground hover:bg-accent-foreground hover:text-primary transition"
+          >
+            Get Started
+          </button>
+
+          {/* Browse Documents Button */}
+          <button
+            onClick={scrollToCommunity}
+            className="bg-transparent border border-foreground px-6 py-2 rounded-full font-semibold text-foreground hover:bg-accent-foreground hover:text-primary transition"
+          >
+            Browse Documents
+          </button>
+        </div>
+      </section>
+
+      {/* Separator between Hero and Features Section */}
+      <Separator className="my-12 h-10" />
+
+      {/* Features Section */}
+      <section className="py-20 px-6 text-center">
+        <h2 className="text-4xl font-bold mb-10">Why Use SAMS?</h2>
+        <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+          {/* Feature 1 */}
+          <div className="bg-muted-foreground p-6 shadow-lg rounded-lg text-background">
+            <h3 className="text-2xl font-semibold mb-3">Upload & Organize</h3>
+            <p>
+              Easily upload documents and manage them with tags, folders, and version history.
             </p>
           </div>
-          <Button asChild>
-            <Link href="/upload">Upload Document</Link>
-          </Button>
+
+          {/* Feature 2 */}
+          <div className="bg-muted-foreground p-6 shadow-lg rounded-lg text-background">
+            <h3 className="text-2xl font-semibold mb-3">Read Anywhere</h3>
+            <p>
+              Mobile-friendly viewer supports PDFs, DOCX, PPT, and more — no extra software needed.
+            </p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="bg-muted-foreground p-6 shadow-lg rounded-lg text-background">
+            <h3 className="text-2xl font-semibold mb-3">Share & Collaborate</h3>
+            <p>
+              Control access, leave comments, and collaborate in real-time with your team or audience.
+            </p>
+          </div>
         </div>
-          {mockDocuments.length === 0 ? <DocumentsEmpty /> : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mockDocuments.map((_, index) => (
-                <DocumentCard key={index} />
-              ))}
-            </div>
-          )}
-      </AnimatedContainer>
+      </section>
+
+      {/* Separator between Features and Community Page Section */}
+      <Separator className="my-12 h-10" />
+
+      {/* Community Page Section */}
+      <div ref={communityRef}>
+        <CommunityPage />
+      </div>
+    </>
   );
 }
