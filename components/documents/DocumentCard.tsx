@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import React from 'react'
-import { TooltipWrapper } from "./wrappers/TooltipWrapper";
+import { TooltipWrapper } from "../wrappers/TooltipWrapper";
+import DocumentViewer from "./DocumentViewer";
 
 const DocumentCard = () => {
     return (
@@ -16,12 +17,7 @@ const DocumentCard = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent className="p-0">
-                <div className="h-48 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                    <div className="text-center p-4">
-                        <div className="text-4xl mb-2">📄</div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">PDF Document</p>
-                    </div>
-                </div>
+                <DocumentViewer pdfPath="/documents/CHAPTER2.pdf"/>
             </CardContent>
             <CardFooter className="flex justify-between items-center pt-4">
                 <div className="flex items-center space-x-2">

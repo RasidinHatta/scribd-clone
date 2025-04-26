@@ -3,7 +3,7 @@ import { AnimatedContainer } from './animations/AnimatedContainer'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import DocumentsEmpty from './empty-states/DocumentsEmpty'
-import DocumentCard from './DocumentCard'
+import DocumentCardTitle from './documents/DocumentCardTitle'
 
 const CommunityPage = () => {
     const mockDocuments = Array(6).fill(0);
@@ -23,7 +23,7 @@ const CommunityPage = () => {
             {mockDocuments.length === 0 ? <DocumentsEmpty /> : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {mockDocuments.map((_, index) => (
-                        <DocumentCard key={index} />
+                        <DocumentCardTitle key={index} />
                     ))}
                 </div>
             )}

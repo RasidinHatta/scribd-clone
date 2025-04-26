@@ -1,4 +1,4 @@
-import DocumentCard from '@/components/DocumentCard'
+import DocumentCard from '@/components/documents/DocumentCard'
 import Comment from '@/components/Comment'
 import React from 'react'
 import CommentForm from '@/components/CommentForm'
