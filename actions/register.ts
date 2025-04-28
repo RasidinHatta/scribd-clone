@@ -4,7 +4,7 @@ import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { RegisterSchema } from "@/lib/schemas";
 import db from "@/prisma/prisma";
-import { signIn } from "@/auth"; // use server-side signIn from auth.js
+import { generateVerificationToken } from "@/lib/token";
 
 export const register = async (data: z.infer<typeof RegisterSchema>) => {
   try {
@@ -27,7 +27,7 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
       return { error: "Email already is in use. Please try another one." };
     }
 
-    const user = await db.user.create({
+    await db.user.create({
       data: {
         email: lowerCaseEmail,
         name,
@@ -35,14 +35,9 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
       },
     });
 
-    // 🟢 Automatically log the user in after registration
-    await signIn("credentials", {
-      email: lowerCaseEmail,
-      password,
-      redirect: false, // Prevent immediate redirect — let form action handle that
-    });
+    const verificationToken = await generateVerificationToken(email)
 
-    return { success: "Registered and logged in!" };
+    return { success: "Email Verification Was Sent" };
   } catch (error) {
     console.error("Register error:", error);
 

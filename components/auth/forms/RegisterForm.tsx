@@ -50,7 +50,6 @@ const RegisterForm = () => {
         setError("");
         setSuccess(res.success);
         setLoading(false);
-        redirect("/")
       }
     });
   };
