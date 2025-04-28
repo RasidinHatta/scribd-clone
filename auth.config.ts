@@ -14,21 +14,25 @@ export default {
         password: {}
       },
       authorize: async (credentials) => {
-        const validatedCredetials = LoginSchema.parse(credentials)
+        const validatedCredentials = LoginSchema.parse(credentials);
+
         const user = await db.user.findFirst({
           where: {
-            email: validatedCredetials.email,
-            password: validatedCredetials.password,
+            email: validatedCredentials.email,
           },
         });
 
         if (!user || !user.password || !user.email) {
-          return null
+          return null;
         }
 
-        const passwordMatch = await bcrypt.compare(validatedCredetials.password, user.password)
-        if (!passwordMatch) return null
-        return user
+        const passwordMatch = await bcrypt.compare(validatedCredentials.password, user.password);
+        if (!passwordMatch) {
+          console.log("wrong password")
+          return null
+        };
+
+        return user;
       },
     })
   ],
