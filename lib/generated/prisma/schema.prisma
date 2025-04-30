@@ -15,17 +15,16 @@ datasource db {
 }
 
 model User {
-  id               String          @id @default(cuid())
-  name             String?
-  email            String          @unique
-  password         String?
-  emailVerified    DateTime?
-  image            String?
-  accounts         Account[]
-  sessions         Session[]
-  twoFactorEnabled Boolean         @default(false)
-  twoFactorSecret  String?
-  Authenticator    Authenticator[]
+  id                    String                 @id @default(cuid())
+  name                  String?
+  email                 String                 @unique
+  password              String?
+  emailVerified         DateTime?
+  image                 String?
+  accounts              Account[]
+  sessions              Session[]
+  twoFactorEnabled      Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -71,18 +70,20 @@ model VerificationToken {
   @@unique([email, token])
 }
 
-// Optional for WebAuthn support
-model Authenticator {
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
+model twoFactorToken {
+  id      String   @id @default(uuid())
+  email   String
+  token   String
+  expires DateTime
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([email, token])
+}
 
-  @@id([userId, credentialID])
+model TwoFactorConfirmation {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
 }

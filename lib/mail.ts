@@ -2,24 +2,40 @@
 
 import nodemailer from 'nodemailer'
 
-export const sendVerificationEmail = async (email: string, token: string) => {
-    const domain = process.env.BASED_URL
-    const confirmationLink = `${domain}/verify-email?token=${token}`
+const domain = process.env.BASED_URL
 
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        auth: {
-            user: process.env.GMAIL_USERNAME,
-            pass: process.env.GMAIL_PASSWORD,
-        },
-    });
-    try {
-        await transporter.sendMail({
-            from: process.env.GMAIL_USERNAME,
-            to: `${email}`,
-            subject: `Verify Your Email | SAMS`,
-            html: `
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  auth: {
+    user: process.env.GMAIL_USERNAME,
+    pass: process.env.GMAIL_PASSWORD,
+  },
+});
+
+
+export const sendTwoFactorEmail = async (email: string, token: string) => {
+  try {
+    await transporter.sendMail({
+      from: process.env.GMAIL_USERNAME,
+      to: `${email}`,
+      subject: `Your Two Factor Authentication Token | SAMS`,
+      html: `<p>Your 2FA code: ${token}</P>`
+    })
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Failed to send email.' };
+  }
+}
+
+export const sendVerificationEmail = async (email: string, token: string) => {
+  const confirmationLink = `${domain}/verify-email?token=${token}`
+  try {
+    await transporter.sendMail({
+      from: process.env.GMAIL_USERNAME,
+      to: `${email}`,
+      subject: `Verify Your Email | SAMS`,
+      html: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
                 <h2 style="color: #1a73e8;">Welcome to SAMS!</h2>
                 <p style="font-size: 16px; color: #333;">
@@ -42,33 +58,23 @@ export const sendVerificationEmail = async (email: string, token: string) => {
                   &copy; ${new Date().getFullYear()} SAMS. All rights reserved.
                 </p>
               </div>
-            `            
-        });
-        return { success: true, message: 'Email sent successfully!' };
-    } catch (error) {
-        console.error(error);
-        return { success: false, message: 'Failed to send email.' };
-    }
+            `
+    });
+    return { success: true, message: 'Email sent successfully!' };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Failed to send email.' };
+  }
 }
 
 export const sendResetPasswordEmail = async (email: string, token: string) => {
-    const domain = process.env.BASED_URL
-    const resetPasswordLink = `${domain}/reset-password?token=${token}`
-
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        auth: {
-            user: process.env.GMAIL_USERNAME,
-            pass: process.env.GMAIL_PASSWORD,
-        },
-    });
-    try {
-        await transporter.sendMail({
-            from: process.env.GMAIL_USERNAME,
-            to: `${email}`,
-            subject: `Reset Your Password | SAMS`,
-            html: `
+  const resetPasswordLink = `${domain}/reset-password?token=${token}`
+  try {
+    await transporter.sendMail({
+      from: process.env.GMAIL_USERNAME,
+      to: `${email}`,
+      subject: `Reset Your Password | SAMS`,
+      html: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
                 <h2 style="color: #1a73e8;">SAMS - Study Archive Management System</h2>
                 <p style="font-size: 16px; color: #333;">
@@ -88,10 +94,10 @@ export const sendResetPasswordEmail = async (email: string, token: string) => {
                 </p>
               </div>
             `
-        });
-        return { success: true, message: 'Email sent successfully!' };
-    } catch (error) {
-        console.error(error);
-        return { success: false, message: 'Failed to send email.' };
-    }
+    });
+    return { success: true, message: 'Email sent successfully!' };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Failed to send email.' };
+  }
 }
