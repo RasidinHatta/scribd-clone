@@ -1,9 +1,8 @@
+// types/prisma-nextjs-monorepo-workaround-plugin.d.ts
+
 declare module '@prisma/nextjs-monorepo-workaround-plugin' {
-    interface Plugin {
-      apply?: (...args: any[]) => void;
-      // You can add more fields if needed
+    export class PrismaPlugin {
+      constructor(...args: any[]);
     }
-  
-    export function PrismaPlugin(): Plugin;
   }
   
