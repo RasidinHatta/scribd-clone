@@ -9,6 +9,7 @@ import {
     Sheet,
     SheetContent,
     SheetHeader,
+    SheetTitle,
     SheetTrigger
 } from './ui/sheet'
 import SearchBar from './SearchBar'
@@ -39,7 +40,7 @@ const Navbar = async () => {
                                     href="/"
                                     className="font-bold text-lg transition-transform transform hover:scale-105 hover:text-primary"
                                 >
-                                    SAMS
+                                    <SheetTitle>SAMS</SheetTitle>
                                 </Link>
                                 <Link
                                     href="/community"
@@ -113,7 +114,7 @@ const Navbar = async () => {
                         </Link>
                         <Link
                             href="/community"
-                            className="text-lg transition-transform transform hover:scale-105 hover:text-primary"
+                            className="text-lg transition-transform transform hover:scale-105 hover:text-primary hidden md:inline"
                         >
                             Community
                         </Link>
