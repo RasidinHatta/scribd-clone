@@ -26,6 +26,7 @@ model User {
   sessions              Session[]
   twoFactorEnabled      Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  documents             Document[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -87,4 +88,19 @@ model TwoFactorConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+model Document {
+  id           String  @id @default(cuid())
+  title        String
+  description  String?
+  url          String // Cloudinary secure URL
+  publicId     String // Cloudinary public_id (for deletion and management)
+  format       String? // Optional: pdf, jpg, png, etc.
+  resourceType String? // image, raw, video, etc.
+  userId       String
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
