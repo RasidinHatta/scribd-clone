@@ -1,5 +1,6 @@
 export const privateRoutes = [
-    "/document",
+    "/documents",
     "/dashboard",
-    "/profile"
+    "/profile",
+    "upload"
 ]

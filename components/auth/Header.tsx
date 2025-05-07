@@ -3,7 +3,7 @@ interface HeaderProps {
     title: string;
 }
 
-const AuthHeader = ({
+const Header = ({
     title,
     label
 }: HeaderProps) => {
@@ -17,4 +17,4 @@ const AuthHeader = ({
   )
 }
 
-export default AuthHeader;
+export default Header;

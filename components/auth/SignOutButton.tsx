@@ -4,5 +4,5 @@
 import { signOut } from "next-auth/react"
 
 export function SignOutButton() {
-  return <button onClick={() => signOut()}>Sign Out</button>
+  return <button className="w-full text-sm text-left pl-2 text-red-500" onClick={() => signOut()}>Sign Out</button>
 }

@@ -1,10 +1,9 @@
 "use client";
 
-import CommunityPage from "@/components/CommunityPage";
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
-import { SignOutButton } from "@/components/auth/SignOutButton";
+import CommunitySection from "@/components/CommunitySection";
 
 export default function Home() {
   const communityRef = useRef<HTMLDivElement>(null);
@@ -19,7 +18,6 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <SignOutButton />
       <section className="h-screen flex flex-col justify-center items-center px-4 text-center">
         <h1 className="text-5xl font-extrabold mb-4">Welcome to SAMS</h1>
         <p className="text-xl mb-6 max-w-2xl">
@@ -82,7 +80,7 @@ export default function Home() {
 
       {/* Community Page Section */}
       <div ref={communityRef}>
-        <CommunityPage />
+        <CommunitySection />
       </div>
     </>
   );

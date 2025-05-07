@@ -1,10 +1,14 @@
+import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
 import React, { Suspense } from 'react'
 
-const AuthLayout = ({
+const AuthLayout = async ({
     children
 }: {
     children: React.ReactNode
 }) => {
+    const session = await auth()
+    if(session) return redirect("/")
     return (
         <section className='w-full relative'>
             {/* Background grid */}

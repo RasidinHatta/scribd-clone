@@ -15,6 +15,7 @@ import {
 import SearchBar from './SearchBar'
 import { SignOutButton } from './auth/SignOutButton'
 import { auth } from '@/auth'
+import UserAvatar from './user/UserAvatar'
 
 const Navbar = async () => {
     const session = await auth()
@@ -64,15 +65,7 @@ const Navbar = async () => {
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
                                                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                                                        <Avatar className="h-8 w-8">
-                                                            <AvatarImage
-                                                                src={session.user?.image ?? "https://github.com/shadcn.png"}
-                                                                alt="User"
-                                                                width={32}
-                                                                height={32}
-                                                            />
-                                                            <AvatarFallback>U</AvatarFallback>
-                                                        </Avatar>
+                                                        <UserAvatar/>
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -82,7 +75,7 @@ const Navbar = async () => {
                                                     <DropdownMenuItem asChild>
                                                         <Link href="/admin">Admin</Link>
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem className="text-red-500">
+                                                    <DropdownMenuItem className="text-red-500" asChild>
                                                         <SignOutButton />
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
@@ -137,15 +130,7 @@ const Navbar = async () => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                                        <Avatar className="h-8 w-8">
-                                            <AvatarImage
-                                                src={session.user?.image ?? "https://github.com/shadcn.png"}
-                                                alt="User"
-                                                width={32}
-                                                height={32}
-                                            />
-                                            <AvatarFallback>U</AvatarFallback>
-                                        </Avatar>
+                                        <UserAvatar/>
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -155,7 +140,7 @@ const Navbar = async () => {
                                     <DropdownMenuItem asChild>
                                         <Link href="/admin">Admin</Link>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-red-500">
+                                    <DropdownMenuItem className="text-red-500" asChild>
                                         <SignOutButton />
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
