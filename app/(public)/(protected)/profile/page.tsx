@@ -2,8 +2,8 @@
 import { auth } from "@/auth"
 import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import TwoFactorToggle from "@/components/auth/TwoFactorToggle "
-import { Button } from "@/components/ui/button"
+import TwoFactorToggle from "@/components/user/TwoFactorToggle "
+import ChangeImageForm from "@/components/user/ChangeImageForm"
 
 const ProfilePage = async () => {
   const session = await auth()
@@ -34,9 +34,7 @@ const ProfilePage = async () => {
         </CardContent>
         {/* Button to change the image */}
         <CardContent className="flex justify-center">
-          <Button>
-            Change Image
-          </Button>
+          <ChangeImageForm/>
         </CardContent>
       </Card>
 

@@ -63,3 +63,10 @@ export const DocumentSchema = z.object({
     format: z.string().optional(),
     resourceType: z.string().optional(),
 })
+
+export const UserImageSchema = z.object({
+    publicId: z.string().min(1, {
+        message: "Public ID is required",
+    }),
+    format: z.string()
+})

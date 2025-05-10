@@ -10,10 +10,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     adapter: PrismaAdapter(db),
     session: {
         strategy: 'jwt',
-        maxAge: 60,
+        maxAge: 20, // 20 seconds
     },
     jwt: {
-        maxAge: 60,
+        maxAge: 20, // 20 seconds
     },
     ...authConfig,
     callbacks: {
@@ -54,7 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const existingAccount = await getAccountByUserId(existingUser.id)
 
             token.isOauth = !!existingAccount
-            token.namee = existingUser.name
+            token.name = existingUser.name
             token.email = existingUser.email
             token.image = existingUser.image
             token.twoFactorEnabled = existingUser.twoFactorEnabled
@@ -70,7 +70,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     id: token.sub,
                     isOauth: token.isOauth,
                     twoFactorEnabled: token.twoFactorEnabled,
-                    emailVerified: token.emailVerified
+                    emailVerified: token.emailVerified,
+                    image: token.image as string,
                 }
             }
         }

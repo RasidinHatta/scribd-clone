@@ -1,6 +1,5 @@
 import { auth } from '@/auth';
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
+import AutoLogout from '@/components/auth/AutoLogout';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
@@ -10,9 +9,12 @@ const ProtectedLayout = async ({
     children: React.ReactNode;
 }) => {
     const session = await auth()
-    if(!session) return redirect("/login")
+    if (!session) return redirect("/login")
     return (
-        <main>{children}</main>
+        <main>
+            <AutoLogout timeout={20 * 1000} />
+            {children}
+        </main>
     );
 };
 

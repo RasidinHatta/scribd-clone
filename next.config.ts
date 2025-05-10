@@ -13,12 +13,16 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "lh3.googleusercontent.com", // Google's image domain for profile pics
+        hostname: "lh3.googleusercontent.com",
       },
       {
         protocol: "https",
-        hostname: "github.com", // GitHub image domain
-        pathname: "/shadcn.png", // Optional: specific image path pattern if needed
+        hostname: "github.com",
+        pathname: "/shadcn.png",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
       },
     ],
   },

@@ -2,7 +2,7 @@
 import { auth } from "@/auth"
 import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import TwoFactorToggle from "./auth/TwoFactorToggle "
+import TwoFactorToggle from "./user/TwoFactorToggle "
 
 const ProfilePage = async () => {
   const session = await auth()
