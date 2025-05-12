@@ -14,18 +14,16 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DocumentSchema } from "@/lib/schemas";
-import { useState } from "react";
+import { useState, useRef } from "react"; // ✅ Import useRef
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { FormSuccess } from "./auth/FormSuccess";
-import { FormError } from "./auth/FormError";
-import { uploadDocCloudinary } from "@/actions/document"; // Make sure this is the right path
+import { uploadDocCloudinary } from "@/actions/document";
+import { toast } from "sonner";
 
 const UploadForm = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null); // ✅ Create ref
 
   const form = useForm<z.infer<typeof DocumentSchema>>({
     resolver: zodResolver(DocumentSchema),
@@ -40,23 +38,25 @@ const UploadForm = () => {
 
   const onSubmit = async (data: z.infer<typeof DocumentSchema>) => {
     setLoading(true);
-    setError("");
-    setSuccess("");
 
     if (!file) {
-      setError("Please select a file.");
+      toast.error("Please select a file.");
       setLoading(false);
       return;
     }
 
     const res = await uploadDocCloudinary(file, data);
     if (res.error) {
-      setError(res.error);
+      toast.error(res.error);
     } else if (res.success) {
-      setSuccess(res.success);
+      toast.success(res.success);
       form.reset();
       setFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""; // ✅ Clear actual input
+      }
     }
+
     setLoading(false);
   };
 
@@ -105,6 +105,7 @@ const UploadForm = () => {
                 <Input
                   type="file"
                   accept=".pdf,.doc,.docx"
+                  ref={fileInputRef} // ✅ Attach ref
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
                       setFile(e.target.files[0]);
@@ -115,9 +116,6 @@ const UploadForm = () => {
               {!file && <FormMessage>Please select a file</FormMessage>}
             </FormItem>
           </div>
-
-          <FormSuccess message={success} />
-          <FormError message={error} />
 
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Uploading..." : "Upload Document"}
