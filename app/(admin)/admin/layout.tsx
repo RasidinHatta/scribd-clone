@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import AccessDenied from '@/components/admin/AccessDenied';
 import Navbar from '@/components/admin/Navbar';
 import SideMenu from '@/components/admin/SideMenu';
 import { redirect } from 'next/navigation';
@@ -10,9 +11,8 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
         return redirect("/admin-login");
     }
 
-    // If not an admin, redirect to home or a forbidden page
     if (session?.user?.role !== 'ADMIN') {
-        return redirect("/");
+        return <AccessDenied />;
     }
 
     return (

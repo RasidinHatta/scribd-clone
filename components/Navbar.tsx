@@ -72,9 +72,6 @@ const Navbar = async () => {
                                                         <Link href="/profile">Profile</Link>
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem asChild>
-                                                        <Link href="/admin">Admin</Link>
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem asChild>
                                                         <SignOutButton />
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
@@ -135,9 +132,6 @@ const Navbar = async () => {
                                 <DropdownMenuContent className="w-56" align="end" forceMount>
                                     <DropdownMenuItem asChild>
                                         <Link href="/profile">Profile</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/admin">Admin</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
                                         <SignOutButton />

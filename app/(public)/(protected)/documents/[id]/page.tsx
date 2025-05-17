@@ -6,6 +6,12 @@ import CommentsEmpty from '@/components/empty-states/CommentsEmpty'
 import { AnimatedContainer } from '@/components/animations/AnimatedContainer'
 import { getDocumentById } from '@/data/document'
 import DocumentNotFound from '@/components/not-found/DocumentNotFound'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Document | SAMS",
+  description: "A document sharing platform with community discussions",
+};
 
 type DocumentPageProps = {
     params: Promise<{ id: string }>;

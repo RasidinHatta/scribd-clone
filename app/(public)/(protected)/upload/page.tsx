@@ -1,5 +1,12 @@
 import UploadForm from '@/components/UploadForm'
+import { Metadata } from 'next';
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: "Upload | SAMS",
+  description: "A document sharing platform with community discussions",
+};
+
 
 const UploadPage = () => {
     return (

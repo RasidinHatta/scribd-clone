@@ -1,5 +1,15 @@
 import db from "@/prisma/prisma"
 
+export const getAllUser = async () => {
+    try {
+        const user = await db.user.findMany()
+        return user
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
+
 export const getUserById = async (id: string) => {
     try {
         const user = await db.user.findUnique({
