@@ -1,6 +1,23 @@
-export const privateRoutes = [
+export const protectedRoute = [
     "/documents",
-    "/dashboard",
     "/profile",
-    "upload"
+    "/upload"
+]
+
+export const publicRoute = [
+    "/",
+    "/community",
+]
+
+export const authRoute = [
+    "/login",
+    "/register"
+]
+
+export const adminRoute = [
+    "/admin/*"
+]
+
+export const adminLoginRoute = [
+    "/admin-login"
 ]

@@ -1,25 +1,38 @@
 import NextAuth from "next-auth"
-import { privateRoutes } from "./route"
 import authConfig from "./auth.config"
+import { adminLoginRoute, adminRoute, authRoute, protectedRoute, publicRoute } from "./route";
 
 const { auth } = NextAuth(authConfig)
 
 export default auth(async (req) => {
-    console.log('Request URL:', req.nextUrl.pathname);
     console.log('Is Logged In:', !!req.auth);
+    console.log('Request URL:', req.nextUrl.pathname);
 
-    // const isLoggedIn = !!req.auth
-    // const { nextUrl } = req
-    // const basedUrl = process.env.BASED_URL
-    // const isPrivateRoutes = privateRoutes.includes(nextUrl.pathname)
-    // const isAuthRoute = nextUrl.pathname.includes("/register") || nextUrl.pathname.includes("/login")
+    const role = req.auth?.user?.role
+    const isLoggedIn = !!req.auth
+    const { nextUrl } = req
+    const basedUrl = process.env.BASED_URL
+    const isProtectedRoutes = protectedRoute.includes(nextUrl.pathname)
+    const isAuthRoute = authRoute.includes(nextUrl.pathname)
+    const isPublicRoute = publicRoute.includes(nextUrl.pathname)
+    const isAdminRoute = adminRoute.includes(nextUrl.pathname)
+    const isAdminLoginRoute = adminLoginRoute.includes(nextUrl.pathname)
 
-    // if(isLoggedIn && isAuthRoute) {
-    //     return Response.redirect(`${basedUrl}`)
-    // }
-    // if (!isLoggedIn && isPrivateRoutes) {
-    //     return Response.redirect(`${basedUrl}/login`)
-    // }
+    if(isLoggedIn && isAuthRoute) {
+        return Response.redirect(`${basedUrl}`)
+    }
+    if (!isLoggedIn && isProtectedRoutes) {
+        return Response.redirect(`${basedUrl}/login`)
+    }
+    if(isAdminRoute && role !== "ADMIN") {
+        return Response.redirect(`${basedUrl}`)
+    }
+    if(!isLoggedIn && isAdminRoute) {
+        return Response.redirect(`${basedUrl}/admin-login`)
+    }
+    if(isPublicRoute && role === "ADMIN") {
+        return Response.redirect(`${basedUrl}/admin`)
+    }
 })
 
 export const config = {

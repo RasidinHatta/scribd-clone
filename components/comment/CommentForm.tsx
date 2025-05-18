@@ -10,6 +10,7 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useRouter } from "next/navigation";
 
 type CommentFormProps = {
     user: {
@@ -23,6 +24,7 @@ type CommentFormProps = {
 
 const CommentForm = ({ user, documentId, parentId, onSuccess }: CommentFormProps) => {
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof CommentSchema>>({
         resolver: zodResolver(CommentSchema),
@@ -40,6 +42,7 @@ const CommentForm = ({ user, documentId, parentId, onSuccess }: CommentFormProps
             toast.success(res.success);
             form.reset();
             onSuccess?.();
+            router.refresh(); // ✅ refresh the current route
         } else if (res.error) {
             toast.error(res.error);
         }

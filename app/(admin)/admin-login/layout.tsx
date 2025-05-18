@@ -7,8 +7,6 @@ const AuthLayout = async ({
 }: {
     children: React.ReactNode
 }) => {
-    const session = await auth()
-    if(session) return redirect("/admin")
     return (
         <section className='w-full relative'>
             {/* Background grid */}

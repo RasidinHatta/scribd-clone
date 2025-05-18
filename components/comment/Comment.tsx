@@ -15,13 +15,13 @@ interface CommentType {
   user?: User | null;
   replies?: CommentType[];
   createdAt: Date;
+  parentId?: string | null;
 }
 
 interface CommentProps {
   comment: CommentType;
   documentId: string;
   user?: User | null;
-  parentId?: string | null;
   depth?: number;
 }
 
@@ -29,7 +29,6 @@ const Comment: React.FC<CommentProps> = ({
   comment,
   documentId,
   user,
-  parentId = null,
   depth = 0,
 }) => {
   const [showReply, setShowReply] = useState(false);
@@ -53,21 +52,21 @@ const Comment: React.FC<CommentProps> = ({
             {showReply ? "Cancel" : "Reply"}
           </button>
 
-          {/* Reply form - appears at the bottom of the comment */}
           {showReply && user && (
             <div className="mt-2">
               <CommentForm
                 user={user}
                 documentId={documentId}
                 parentId={comment.id}
-                onSuccess={() => setShowReply(false)}
+                onSuccess={() => {
+                  setShowReply(false);
+                }}
               />
             </div>
           )}
         </div>
       </div>
 
-      {/* Render Replies recursively */}
       {comment.replies && comment.replies.length > 0 && (
         <div className="mt-4 space-y-4">
           {comment.replies.map((reply) => (
@@ -76,7 +75,6 @@ const Comment: React.FC<CommentProps> = ({
               comment={reply}
               documentId={documentId}
               user={user}
-              parentId={comment.id}
               depth={depth + 1}
             />
           ))}

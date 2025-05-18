@@ -36,17 +36,21 @@ const SearchBar = () => {
 
     // Debounce navigation effect
     useEffect(() => {
-        const trimmed = query.trim()
+        const trimmed = query.trim();
+
+        const currentPath = window.location.pathname;
+        if (!currentPath.startsWith("/community")) return;
+
         const timeoutId = setTimeout(() => {
             if (trimmed) {
                 router.push(`/community?q=${encodeURIComponent(trimmed)}`)
             } else {
                 router.push('/community')
             }
-        }, 1500)
+        }, 1500);
 
-        return () => clearTimeout(timeoutId)
-    }, [query, router])
+        return () => clearTimeout(timeoutId);
+    }, [query, router]);
 
     // Immediate submit on Enter
     const onSubmit = (data: { search?: string }) => {
