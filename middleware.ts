@@ -12,7 +12,7 @@ export default auth(async (req) => {
   console.log('Is Logged In:', !!req.auth);
   console.log('Request URL:', req.nextUrl.pathname);
 
-  const role = token?.roleName as string || "PUBLIC";
+  const role = token?.roleName || "PUBLIC";
 
   const isAdmin = role === "ADMIN";
   console.log(isAdmin, role)
