@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "SAMS",
   description: "A document sharing platform with community discussions",
 };
-
+export const dynamic = 'force-dynamic'
 export default function RootLayout({
   children,
 }: Readonly<{
