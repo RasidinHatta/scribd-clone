@@ -35,8 +35,8 @@ model User {
   documents             Document[]
   comments              Comment[]
 
-  roleId String
-  role   Role   @relation(fields: [roleId], references: [id])
+  roleName RoleName
+  role     Role     @relation(fields: [roleName], references: [name])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

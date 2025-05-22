@@ -1,8 +1,8 @@
 "use client"
 
-import { twoFactorOption } from "@/actions/login"
 import { useState, useTransition } from "react"
 import { Switch } from "../ui/switch"
+import { twoFactorOption } from "@/actions/user"
 
 const TwoFactorToggle = ({ initialValue }: { initialValue: boolean }) => {
     const [enabled, setEnabled] = useState(initialValue)

@@ -1,13 +1,23 @@
 import db from "@/prisma/prisma"
 
+export const getAllRoles = async () => {
+    try {
+        const roles = await db.role.findMany()
+        return roles
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
+
 export const getRoleById = async (id: string) => {
     try {
-        const user = await db.role.findFirst({
+        const role = await db.role.findFirst({
             where: {
                 id
             }
         })
-        return user
+        return role
     } catch (error) {
         console.log(error)
         return null

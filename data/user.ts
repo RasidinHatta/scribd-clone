@@ -9,20 +9,25 @@ export const getAllUser = async () => {
         return null
     }
 }
+
 export const getAllUserWithRole = async () => {
     try {
-        const user = await db.user.findMany({
-            include: {
-                role: true
-            }
-        })
-        return user
+        const users = await db.user.findMany({
+            where: {
+                NOT: {
+                    roleName: "ADMIN"
+                }
+            },
+            orderBy: {
+                name: "asc", // 👈 default sort
+            },
+        });
+        return users;
     } catch (error) {
-        console.log(error)
-        return null
+        console.log(error);
+        return null;
     }
-}
-
+};
 export const getUserById = async (id: string) => {
     try {
         const user = await db.user.findUnique({

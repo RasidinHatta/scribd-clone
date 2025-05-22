@@ -2,17 +2,19 @@
 
 import * as React from "react"
 import {
-  ColumnFiltersState,
+  ColumnDef,
+  FilterFn,
   SortingState,
   VisibilityState,
+  ColumnFiltersState,
+  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  flexRender,
-  FilterFn,
 } from "@tanstack/react-table"
+
 import {
   Table,
   TableBody,
@@ -23,33 +25,32 @@ import {
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { ChevronDown } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
-import { ColumnDef } from "@tanstack/react-table"
+import { ChevronDown } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [globalFilter, setGlobalFilter] = React.useState("")
 
-  // Custom global filter function to search in name AND email
-  const globalFilterFn: FilterFn<TData> = (row, columnId, filterValue) => {
+  const globalFilterFn: FilterFn<TData> = (row, _columnId, filterValue) => {
     const name = String(row.getValue("name") ?? "").toLowerCase()
     const email = String(row.getValue("email") ?? "").toLowerCase()
     const search = String(filterValue).toLowerCase()
-
     return name.includes(search) || email.includes(search)
   }
 
@@ -66,7 +67,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn, // register custom global filter
+    globalFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -74,43 +75,49 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   })
 
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4 gap-2">
+    <div className="space-y-4 w-full">
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
         <Input
           placeholder="Search name or email..."
           value={globalFilter ?? ""}
           onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((col) => col.getCanHide())
-              .map((col) => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  checked={col.getIsVisible()}
-                  onCheckedChange={(value) => col.toggleVisibility(!!value)}
-                >
-                  {col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="ml-auto">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                Columns <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table.getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((group) => (
-              <TableRow key={group.id}>
-                {group.headers.map((header) => (
-                  <TableHead key={header.id}>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                    className="cursor-pointer select-none"
+                  >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
@@ -118,7 +125,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length > 0 ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
@@ -139,7 +146,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </Table>
       </div>
 
-      <div className="flex justify-end items-center space-x-2 py-4">
+      <div className="flex justify-center items-center gap-2">
         <Button
           variant="outline"
           size="sm"
@@ -148,6 +155,10 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         >
           Previous
         </Button>
+        <span className="text-sm text-muted-foreground">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </span>
         <Button
           variant="outline"
           size="sm"

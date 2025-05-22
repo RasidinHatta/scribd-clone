@@ -34,7 +34,7 @@ const UserPage = async ({ params }: UserPageProps) => {
           <strong>Email:</strong> {user.email}
         </div>
         <div>
-          <strong>Role:</strong> {user.role}
+          <strong>Role:</strong> {user.roleName}
         </div>
         <div>
           <strong>Email Verified:</strong>{' '}

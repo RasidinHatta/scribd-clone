@@ -33,15 +33,6 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
       ? RoleName.USER
       : RoleName.PUBLICUSER;
 
-    // Get Role from DB
-    const role = await db.role.findUnique({
-      where: { name: roleName },
-    });
-
-    if (!role) {
-      return { error: `Role "${roleName}" not found in the system.` };
-    }
-
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -51,7 +42,7 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
         email: lowerCaseEmail,
         name,
         password: hashedPassword,
-        roleId: role.id,
+        roleName,
       },
     });
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import { getCommunityDocuments } from '@/data/document';
 import { columns as documentColumns } from '@/components/admin/documents/columns';
-import { getAllUser } from '@/data/user';
+import { getAllUserWithRole } from '@/data/user';
 import { userColumns } from '@/components/admin/user/columns';
 import { DataTable as DocumentTable } from '@/components/admin/documents/data-table'
 import { DataTable as UserTable } from '@/components/admin/user/data-table'
 
 const AdminPage = async () => {
   const documents = await getCommunityDocuments();
-  const users = (await getAllUser()) ?? [];
+  const users = (await getAllUserWithRole()) ?? [];
 
   return (
     <div className="p-4 space-y-12">

@@ -11,17 +11,10 @@ export default auth(async (req) => {
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
   console.log('Is Logged In:', !!req.auth);
   console.log('Request URL:', req.nextUrl.pathname);
-  const ADMIN_ID = process.env.ADMIN;
-  const USER_ID = process.env.USER;
-  const PUBLICUSER_ID = process.env.PUBLICUSER;
 
-  const roleId = token?.roleId as string;
+  const role = token?.roleName as string || "PUBLIC";
 
-  const role =
-    roleId === ADMIN_ID ? "ADMIN" :
-      roleId === USER_ID ? "USER" :
-        "PUBLICUSER";
-  const isAdmin = roleId === ADMIN_ID;
+  const isAdmin = role === "ADMIN";
   console.log(isAdmin, role)
   const isLoggedIn = !!req.auth;
   const { nextUrl } = req;
@@ -52,7 +45,7 @@ export default auth(async (req) => {
   if (!isLoggedIn && isAdminRoute) {
     return Response.redirect(`${basedUrl}/admin-login`);
   }
-  if (isLoggedIn && roleId === PUBLICUSER_ID && isUserRoute) {
+  if (isLoggedIn && role === "PUBLICUSER" && isUserRoute) {
     return Response.redirect(`${basedUrl}/access-denied`);
   }
 });
