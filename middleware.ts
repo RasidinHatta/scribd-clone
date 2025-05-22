@@ -27,8 +27,11 @@ export default auth(async (req) => {
   const isAdminLoginRoute = adminLoginRoute.includes(nextUrl.pathname);
   const isUserRoute = userRoute.includes(nextUrl.pathname);
 
-  if (isLoggedIn && isAuthRoute) {
+  if (isLoggedIn && isAuthRoute && !isAdmin) {
     return Response.redirect(`${basedUrl}`);
+  }
+  if (isLoggedIn && isAdminLoginRoute && isAdmin) {
+    return Response.redirect(`${basedUrl}/admin`);
   }
   if (isAdminRoute && !isAdmin && isLoggedIn) {
     return Response.redirect(`${basedUrl}`);
