@@ -8,7 +8,7 @@ const { auth } = NextAuth(authConfig);
 
 export default auth(async (req) => {
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-  const role = token?.roleName as string || "PUBLICUSER";
+  const role = token?.roleName;
 
   const isAdmin = role === "ADMIN";
   const isLoggedIn = !!req.auth;
