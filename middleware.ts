@@ -7,7 +7,7 @@ import { getToken } from "next-auth/jwt";
 const { auth } = NextAuth(authConfig);
 
 export default auth(async (req) => {
-  const token = await getToken({ req });
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
   const role = token?.roleName;
 
   const isAdmin = role === "ADMIN";
