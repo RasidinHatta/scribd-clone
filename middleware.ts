@@ -67,7 +67,7 @@ export default auth(async (req) => {
   const isAdmin = role === "ADMIN";
   const isLoggedIn = !!token;
 
-  // 3. Auth routes (login/signup/admin-login) - redirect logged in users
+  // 3. Auth routes (login/register/admin-login) - redirect logged in users
   if (isLoggedIn && (isAuthRoute || matchesAny(adminLoginRoute, path))) {
     return Response.redirect(isAdmin ? `${basedUrl}/admin` : `${basedUrl}`);
   }
