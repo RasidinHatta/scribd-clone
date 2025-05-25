@@ -26,7 +26,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-    experimental: {
+  allowedDevOrigins: [
+    'http://10.203.106.185',
+  ],
+  experimental: {
     serverActions: {
       bodySizeLimit: '10mb', // 🔥 increase as needed
     },

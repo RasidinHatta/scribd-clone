@@ -38,7 +38,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
+export function CommentsDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -48,10 +48,16 @@ export function DataTable<TData, TValue>({
   const [globalFilter, setGlobalFilter] = React.useState("")
 
   const globalFilterFn: FilterFn<TData> = (row, _columnId, filterValue) => {
-    const title = String(row.getValue("title") ?? "").toLowerCase()
-    const description = String(row.getValue("description") ?? "").toLowerCase()
+    const content = String(row.getValue("content") ?? "").toLowerCase()
+    const userName = String(row.getValue("userName") ?? "").toLowerCase() // Assuming you include user name
+    const documentTitle = String(row.getValue("documentTitle") ?? "").toLowerCase() // Assuming you include document title
     const search = String(filterValue).toLowerCase()
-    return title.includes(search) || description.includes(search)
+    
+    return (
+      content.includes(search) || 
+      userName.includes(search) || 
+      documentTitle.includes(search)
+    )
   }
 
   const table = useReactTable({
@@ -78,7 +84,7 @@ export function DataTable<TData, TValue>({
     <div className="space-y-4 w-full">
       <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
         <Input
-          placeholder="Search by title or description..."
+          placeholder="Search comments, authors, or documents..."
           value={globalFilter ?? ""}
           onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm"
@@ -138,7 +144,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  No documents found.
+                  No comments found.
                 </TableCell>
               </TableRow>
             )}

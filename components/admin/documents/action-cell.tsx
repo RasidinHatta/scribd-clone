@@ -25,7 +25,7 @@ import { MoreHorizontal } from "lucide-react"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 
-type DocumentDetails = {
+export type DocumentDetails = {
     id: string
     title: string
     description: string | null
