@@ -3039,10 +3039,6 @@ export namespace Prisma {
     id: string | null
     name: $Enums.RoleName | null
     description: string | null
-    createUser: boolean | null
-    deleteUser: boolean | null
-    updateUser: boolean | null
-    readUser: boolean | null
     createDocument: boolean | null
     updateDocument: boolean | null
     deleteDocument: boolean | null
@@ -3050,6 +3046,7 @@ export namespace Prisma {
     createComment: boolean | null
     deleteComment: boolean | null
     readComment: boolean | null
+    updateComment: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3058,10 +3055,6 @@ export namespace Prisma {
     id: string | null
     name: $Enums.RoleName | null
     description: string | null
-    createUser: boolean | null
-    deleteUser: boolean | null
-    updateUser: boolean | null
-    readUser: boolean | null
     createDocument: boolean | null
     updateDocument: boolean | null
     deleteDocument: boolean | null
@@ -3069,6 +3062,7 @@ export namespace Prisma {
     createComment: boolean | null
     deleteComment: boolean | null
     readComment: boolean | null
+    updateComment: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3077,10 +3071,6 @@ export namespace Prisma {
     id: number
     name: number
     description: number
-    createUser: number
-    deleteUser: number
-    updateUser: number
-    readUser: number
     createDocument: number
     updateDocument: number
     deleteDocument: number
@@ -3088,6 +3078,7 @@ export namespace Prisma {
     createComment: number
     deleteComment: number
     readComment: number
+    updateComment: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3098,10 +3089,6 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
-    createUser?: true
-    deleteUser?: true
-    updateUser?: true
-    readUser?: true
     createDocument?: true
     updateDocument?: true
     deleteDocument?: true
@@ -3109,6 +3096,7 @@ export namespace Prisma {
     createComment?: true
     deleteComment?: true
     readComment?: true
+    updateComment?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3117,10 +3105,6 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
-    createUser?: true
-    deleteUser?: true
-    updateUser?: true
-    readUser?: true
     createDocument?: true
     updateDocument?: true
     deleteDocument?: true
@@ -3128,6 +3112,7 @@ export namespace Prisma {
     createComment?: true
     deleteComment?: true
     readComment?: true
+    updateComment?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3136,10 +3121,6 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
-    createUser?: true
-    deleteUser?: true
-    updateUser?: true
-    readUser?: true
     createDocument?: true
     updateDocument?: true
     deleteDocument?: true
@@ -3147,6 +3128,7 @@ export namespace Prisma {
     createComment?: true
     deleteComment?: true
     readComment?: true
+    updateComment?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3228,10 +3210,6 @@ export namespace Prisma {
     id: string
     name: $Enums.RoleName
     description: string | null
-    createUser: boolean
-    deleteUser: boolean
-    updateUser: boolean
-    readUser: boolean
     createDocument: boolean
     updateDocument: boolean
     deleteDocument: boolean
@@ -3239,6 +3217,7 @@ export namespace Prisma {
     createComment: boolean
     deleteComment: boolean
     readComment: boolean
+    updateComment: boolean
     createdAt: Date
     updatedAt: Date
     _count: RoleCountAggregateOutputType | null
@@ -3264,10 +3243,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
-    createUser?: boolean
-    deleteUser?: boolean
-    updateUser?: boolean
-    readUser?: boolean
     createDocument?: boolean
     updateDocument?: boolean
     deleteDocument?: boolean
@@ -3275,6 +3250,7 @@ export namespace Prisma {
     createComment?: boolean
     deleteComment?: boolean
     readComment?: boolean
+    updateComment?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | Role$usersArgs<ExtArgs>
@@ -3285,10 +3261,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
-    createUser?: boolean
-    deleteUser?: boolean
-    updateUser?: boolean
-    readUser?: boolean
     createDocument?: boolean
     updateDocument?: boolean
     deleteDocument?: boolean
@@ -3296,6 +3268,7 @@ export namespace Prisma {
     createComment?: boolean
     deleteComment?: boolean
     readComment?: boolean
+    updateComment?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["role"]>
@@ -3304,10 +3277,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
-    createUser?: boolean
-    deleteUser?: boolean
-    updateUser?: boolean
-    readUser?: boolean
     createDocument?: boolean
     updateDocument?: boolean
     deleteDocument?: boolean
@@ -3315,6 +3284,7 @@ export namespace Prisma {
     createComment?: boolean
     deleteComment?: boolean
     readComment?: boolean
+    updateComment?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["role"]>
@@ -3323,10 +3293,6 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
-    createUser?: boolean
-    deleteUser?: boolean
-    updateUser?: boolean
-    readUser?: boolean
     createDocument?: boolean
     updateDocument?: boolean
     deleteDocument?: boolean
@@ -3334,11 +3300,12 @@ export namespace Prisma {
     createComment?: boolean
     deleteComment?: boolean
     readComment?: boolean
+    updateComment?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type RoleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "createUser" | "deleteUser" | "updateUser" | "readUser" | "createDocument" | "updateDocument" | "deleteDocument" | "readDocument" | "createComment" | "deleteComment" | "readComment" | "createdAt" | "updatedAt", ExtArgs["result"]["role"]>
+  export type RoleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "createDocument" | "updateDocument" | "deleteDocument" | "readDocument" | "createComment" | "deleteComment" | "readComment" | "updateComment" | "createdAt" | "updatedAt", ExtArgs["result"]["role"]>
   export type RoleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Role$usersArgs<ExtArgs>
     _count?: boolean | RoleCountOutputTypeDefaultArgs<ExtArgs>
@@ -3355,10 +3322,6 @@ export namespace Prisma {
       id: string
       name: $Enums.RoleName
       description: string | null
-      createUser: boolean
-      deleteUser: boolean
-      updateUser: boolean
-      readUser: boolean
       createDocument: boolean
       updateDocument: boolean
       deleteDocument: boolean
@@ -3366,6 +3329,7 @@ export namespace Prisma {
       createComment: boolean
       deleteComment: boolean
       readComment: boolean
+      updateComment: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["role"]>
@@ -3795,10 +3759,6 @@ export namespace Prisma {
     readonly id: FieldRef<"Role", 'String'>
     readonly name: FieldRef<"Role", 'RoleName'>
     readonly description: FieldRef<"Role", 'String'>
-    readonly createUser: FieldRef<"Role", 'Boolean'>
-    readonly deleteUser: FieldRef<"Role", 'Boolean'>
-    readonly updateUser: FieldRef<"Role", 'Boolean'>
-    readonly readUser: FieldRef<"Role", 'Boolean'>
     readonly createDocument: FieldRef<"Role", 'Boolean'>
     readonly updateDocument: FieldRef<"Role", 'Boolean'>
     readonly deleteDocument: FieldRef<"Role", 'Boolean'>
@@ -3806,6 +3766,7 @@ export namespace Prisma {
     readonly createComment: FieldRef<"Role", 'Boolean'>
     readonly deleteComment: FieldRef<"Role", 'Boolean'>
     readonly readComment: FieldRef<"Role", 'Boolean'>
+    readonly updateComment: FieldRef<"Role", 'Boolean'>
     readonly createdAt: FieldRef<"Role", 'DateTime'>
     readonly updatedAt: FieldRef<"Role", 'DateTime'>
   }
@@ -11811,10 +11772,6 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     description: 'description',
-    createUser: 'createUser',
-    deleteUser: 'deleteUser',
-    updateUser: 'updateUser',
-    readUser: 'readUser',
     createDocument: 'createDocument',
     updateDocument: 'updateDocument',
     deleteDocument: 'deleteDocument',
@@ -11822,6 +11779,7 @@ export namespace Prisma {
     createComment: 'createComment',
     deleteComment: 'deleteComment',
     readComment: 'readComment',
+    updateComment: 'updateComment',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -12127,10 +12085,6 @@ export namespace Prisma {
     id?: StringFilter<"Role"> | string
     name?: EnumRoleNameFilter<"Role"> | $Enums.RoleName
     description?: StringNullableFilter<"Role"> | string | null
-    createUser?: BoolFilter<"Role"> | boolean
-    deleteUser?: BoolFilter<"Role"> | boolean
-    updateUser?: BoolFilter<"Role"> | boolean
-    readUser?: BoolFilter<"Role"> | boolean
     createDocument?: BoolFilter<"Role"> | boolean
     updateDocument?: BoolFilter<"Role"> | boolean
     deleteDocument?: BoolFilter<"Role"> | boolean
@@ -12138,6 +12092,7 @@ export namespace Prisma {
     createComment?: BoolFilter<"Role"> | boolean
     deleteComment?: BoolFilter<"Role"> | boolean
     readComment?: BoolFilter<"Role"> | boolean
+    updateComment?: BoolFilter<"Role"> | boolean
     createdAt?: DateTimeFilter<"Role"> | Date | string
     updatedAt?: DateTimeFilter<"Role"> | Date | string
     users?: UserListRelationFilter
@@ -12147,10 +12102,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
-    createUser?: SortOrder
-    deleteUser?: SortOrder
-    updateUser?: SortOrder
-    readUser?: SortOrder
     createDocument?: SortOrder
     updateDocument?: SortOrder
     deleteDocument?: SortOrder
@@ -12158,6 +12109,7 @@ export namespace Prisma {
     createComment?: SortOrder
     deleteComment?: SortOrder
     readComment?: SortOrder
+    updateComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
@@ -12170,10 +12122,6 @@ export namespace Prisma {
     OR?: RoleWhereInput[]
     NOT?: RoleWhereInput | RoleWhereInput[]
     description?: StringNullableFilter<"Role"> | string | null
-    createUser?: BoolFilter<"Role"> | boolean
-    deleteUser?: BoolFilter<"Role"> | boolean
-    updateUser?: BoolFilter<"Role"> | boolean
-    readUser?: BoolFilter<"Role"> | boolean
     createDocument?: BoolFilter<"Role"> | boolean
     updateDocument?: BoolFilter<"Role"> | boolean
     deleteDocument?: BoolFilter<"Role"> | boolean
@@ -12181,6 +12129,7 @@ export namespace Prisma {
     createComment?: BoolFilter<"Role"> | boolean
     deleteComment?: BoolFilter<"Role"> | boolean
     readComment?: BoolFilter<"Role"> | boolean
+    updateComment?: BoolFilter<"Role"> | boolean
     createdAt?: DateTimeFilter<"Role"> | Date | string
     updatedAt?: DateTimeFilter<"Role"> | Date | string
     users?: UserListRelationFilter
@@ -12190,10 +12139,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
-    createUser?: SortOrder
-    deleteUser?: SortOrder
-    updateUser?: SortOrder
-    readUser?: SortOrder
     createDocument?: SortOrder
     updateDocument?: SortOrder
     deleteDocument?: SortOrder
@@ -12201,6 +12146,7 @@ export namespace Prisma {
     createComment?: SortOrder
     deleteComment?: SortOrder
     readComment?: SortOrder
+    updateComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: RoleCountOrderByAggregateInput
@@ -12215,10 +12161,6 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Role"> | string
     name?: EnumRoleNameWithAggregatesFilter<"Role"> | $Enums.RoleName
     description?: StringNullableWithAggregatesFilter<"Role"> | string | null
-    createUser?: BoolWithAggregatesFilter<"Role"> | boolean
-    deleteUser?: BoolWithAggregatesFilter<"Role"> | boolean
-    updateUser?: BoolWithAggregatesFilter<"Role"> | boolean
-    readUser?: BoolWithAggregatesFilter<"Role"> | boolean
     createDocument?: BoolWithAggregatesFilter<"Role"> | boolean
     updateDocument?: BoolWithAggregatesFilter<"Role"> | boolean
     deleteDocument?: BoolWithAggregatesFilter<"Role"> | boolean
@@ -12226,6 +12168,7 @@ export namespace Prisma {
     createComment?: BoolWithAggregatesFilter<"Role"> | boolean
     deleteComment?: BoolWithAggregatesFilter<"Role"> | boolean
     readComment?: BoolWithAggregatesFilter<"Role"> | boolean
+    updateComment?: BoolWithAggregatesFilter<"Role"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Role"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Role"> | Date | string
   }
@@ -12790,10 +12733,6 @@ export namespace Prisma {
     id?: string
     name: $Enums.RoleName
     description?: string | null
-    createUser?: boolean
-    deleteUser?: boolean
-    updateUser?: boolean
-    readUser?: boolean
     createDocument?: boolean
     updateDocument?: boolean
     deleteDocument?: boolean
@@ -12801,6 +12740,7 @@ export namespace Prisma {
     createComment?: boolean
     deleteComment?: boolean
     readComment?: boolean
+    updateComment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutRoleInput
@@ -12810,10 +12750,6 @@ export namespace Prisma {
     id?: string
     name: $Enums.RoleName
     description?: string | null
-    createUser?: boolean
-    deleteUser?: boolean
-    updateUser?: boolean
-    readUser?: boolean
     createDocument?: boolean
     updateDocument?: boolean
     deleteDocument?: boolean
@@ -12821,6 +12757,7 @@ export namespace Prisma {
     createComment?: boolean
     deleteComment?: boolean
     readComment?: boolean
+    updateComment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutRoleInput
@@ -12830,10 +12767,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: EnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    createUser?: BoolFieldUpdateOperationsInput | boolean
-    deleteUser?: BoolFieldUpdateOperationsInput | boolean
-    updateUser?: BoolFieldUpdateOperationsInput | boolean
-    readUser?: BoolFieldUpdateOperationsInput | boolean
     createDocument?: BoolFieldUpdateOperationsInput | boolean
     updateDocument?: BoolFieldUpdateOperationsInput | boolean
     deleteDocument?: BoolFieldUpdateOperationsInput | boolean
@@ -12841,6 +12774,7 @@ export namespace Prisma {
     createComment?: BoolFieldUpdateOperationsInput | boolean
     deleteComment?: BoolFieldUpdateOperationsInput | boolean
     readComment?: BoolFieldUpdateOperationsInput | boolean
+    updateComment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutRoleNestedInput
@@ -12850,10 +12784,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: EnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    createUser?: BoolFieldUpdateOperationsInput | boolean
-    deleteUser?: BoolFieldUpdateOperationsInput | boolean
-    updateUser?: BoolFieldUpdateOperationsInput | boolean
-    readUser?: BoolFieldUpdateOperationsInput | boolean
     createDocument?: BoolFieldUpdateOperationsInput | boolean
     updateDocument?: BoolFieldUpdateOperationsInput | boolean
     deleteDocument?: BoolFieldUpdateOperationsInput | boolean
@@ -12861,6 +12791,7 @@ export namespace Prisma {
     createComment?: BoolFieldUpdateOperationsInput | boolean
     deleteComment?: BoolFieldUpdateOperationsInput | boolean
     readComment?: BoolFieldUpdateOperationsInput | boolean
+    updateComment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutRoleNestedInput
@@ -12870,10 +12801,6 @@ export namespace Prisma {
     id?: string
     name: $Enums.RoleName
     description?: string | null
-    createUser?: boolean
-    deleteUser?: boolean
-    updateUser?: boolean
-    readUser?: boolean
     createDocument?: boolean
     updateDocument?: boolean
     deleteDocument?: boolean
@@ -12881,6 +12808,7 @@ export namespace Prisma {
     createComment?: boolean
     deleteComment?: boolean
     readComment?: boolean
+    updateComment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12889,10 +12817,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: EnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    createUser?: BoolFieldUpdateOperationsInput | boolean
-    deleteUser?: BoolFieldUpdateOperationsInput | boolean
-    updateUser?: BoolFieldUpdateOperationsInput | boolean
-    readUser?: BoolFieldUpdateOperationsInput | boolean
     createDocument?: BoolFieldUpdateOperationsInput | boolean
     updateDocument?: BoolFieldUpdateOperationsInput | boolean
     deleteDocument?: BoolFieldUpdateOperationsInput | boolean
@@ -12900,6 +12824,7 @@ export namespace Prisma {
     createComment?: BoolFieldUpdateOperationsInput | boolean
     deleteComment?: BoolFieldUpdateOperationsInput | boolean
     readComment?: BoolFieldUpdateOperationsInput | boolean
+    updateComment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12908,10 +12833,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: EnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    createUser?: BoolFieldUpdateOperationsInput | boolean
-    deleteUser?: BoolFieldUpdateOperationsInput | boolean
-    updateUser?: BoolFieldUpdateOperationsInput | boolean
-    readUser?: BoolFieldUpdateOperationsInput | boolean
     createDocument?: BoolFieldUpdateOperationsInput | boolean
     updateDocument?: BoolFieldUpdateOperationsInput | boolean
     deleteDocument?: BoolFieldUpdateOperationsInput | boolean
@@ -12919,6 +12840,7 @@ export namespace Prisma {
     createComment?: BoolFieldUpdateOperationsInput | boolean
     deleteComment?: BoolFieldUpdateOperationsInput | boolean
     readComment?: BoolFieldUpdateOperationsInput | boolean
+    updateComment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13640,10 +13562,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    createUser?: SortOrder
-    deleteUser?: SortOrder
-    updateUser?: SortOrder
-    readUser?: SortOrder
     createDocument?: SortOrder
     updateDocument?: SortOrder
     deleteDocument?: SortOrder
@@ -13651,6 +13569,7 @@ export namespace Prisma {
     createComment?: SortOrder
     deleteComment?: SortOrder
     readComment?: SortOrder
+    updateComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13659,10 +13578,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    createUser?: SortOrder
-    deleteUser?: SortOrder
-    updateUser?: SortOrder
-    readUser?: SortOrder
     createDocument?: SortOrder
     updateDocument?: SortOrder
     deleteDocument?: SortOrder
@@ -13670,6 +13585,7 @@ export namespace Prisma {
     createComment?: SortOrder
     deleteComment?: SortOrder
     readComment?: SortOrder
+    updateComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13678,10 +13594,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    createUser?: SortOrder
-    deleteUser?: SortOrder
-    updateUser?: SortOrder
-    readUser?: SortOrder
     createDocument?: SortOrder
     updateDocument?: SortOrder
     deleteDocument?: SortOrder
@@ -13689,6 +13601,7 @@ export namespace Prisma {
     createComment?: SortOrder
     deleteComment?: SortOrder
     readComment?: SortOrder
+    updateComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14766,10 +14679,6 @@ export namespace Prisma {
     id?: string
     name: $Enums.RoleName
     description?: string | null
-    createUser?: boolean
-    deleteUser?: boolean
-    updateUser?: boolean
-    readUser?: boolean
     createDocument?: boolean
     updateDocument?: boolean
     deleteDocument?: boolean
@@ -14777,6 +14686,7 @@ export namespace Prisma {
     createComment?: boolean
     deleteComment?: boolean
     readComment?: boolean
+    updateComment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14785,10 +14695,6 @@ export namespace Prisma {
     id?: string
     name: $Enums.RoleName
     description?: string | null
-    createUser?: boolean
-    deleteUser?: boolean
-    updateUser?: boolean
-    readUser?: boolean
     createDocument?: boolean
     updateDocument?: boolean
     deleteDocument?: boolean
@@ -14796,6 +14702,7 @@ export namespace Prisma {
     createComment?: boolean
     deleteComment?: boolean
     readComment?: boolean
+    updateComment?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14962,10 +14869,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: EnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    createUser?: BoolFieldUpdateOperationsInput | boolean
-    deleteUser?: BoolFieldUpdateOperationsInput | boolean
-    updateUser?: BoolFieldUpdateOperationsInput | boolean
-    readUser?: BoolFieldUpdateOperationsInput | boolean
     createDocument?: BoolFieldUpdateOperationsInput | boolean
     updateDocument?: BoolFieldUpdateOperationsInput | boolean
     deleteDocument?: BoolFieldUpdateOperationsInput | boolean
@@ -14973,6 +14876,7 @@ export namespace Prisma {
     createComment?: BoolFieldUpdateOperationsInput | boolean
     deleteComment?: BoolFieldUpdateOperationsInput | boolean
     readComment?: BoolFieldUpdateOperationsInput | boolean
+    updateComment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14981,10 +14885,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: EnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    createUser?: BoolFieldUpdateOperationsInput | boolean
-    deleteUser?: BoolFieldUpdateOperationsInput | boolean
-    updateUser?: BoolFieldUpdateOperationsInput | boolean
-    readUser?: BoolFieldUpdateOperationsInput | boolean
     createDocument?: BoolFieldUpdateOperationsInput | boolean
     updateDocument?: BoolFieldUpdateOperationsInput | boolean
     deleteDocument?: BoolFieldUpdateOperationsInput | boolean
@@ -14992,6 +14892,7 @@ export namespace Prisma {
     createComment?: BoolFieldUpdateOperationsInput | boolean
     deleteComment?: BoolFieldUpdateOperationsInput | boolean
     readComment?: BoolFieldUpdateOperationsInput | boolean
+    updateComment?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

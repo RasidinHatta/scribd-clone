@@ -47,12 +47,6 @@ model Role {
   name        RoleName @unique
   description String?
 
-  // Direct boolean permissions
-  createUser Boolean @default(false)
-  deleteUser Boolean @default(false)
-  updateUser Boolean @default(false)
-  readUser   Boolean @default(false)
-
   createDocument Boolean @default(false)
   updateDocument Boolean @default(false)
   deleteDocument Boolean @default(false)
@@ -61,6 +55,7 @@ model Role {
   createComment Boolean @default(false)
   deleteComment Boolean @default(false)
   readComment   Boolean @default(false)
+  updateComment   Boolean @default(false)
 
   users User[]
 

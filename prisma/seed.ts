@@ -6,10 +6,6 @@ async function seedRoles() {
     data: {
       name: RoleName.ADMIN,
       description: "Administrator with full access",
-      createUser: true,
-      deleteUser: true,
-      updateUser: true,
-      readUser: true,
       createDocument: true,
       updateDocument: true,
       deleteDocument: true,

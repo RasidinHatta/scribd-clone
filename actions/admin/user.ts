@@ -69,3 +69,29 @@ export const editUserById = async (userId: string, data: {
     return { success: false, error: "Failed to update user" }
   }
 }
+
+export async function getUsersByRoleName(roleName: "ADMIN" | "USER" | "PUBLICUSER") {
+  try {
+    const users = await db.user.findMany({
+      where: {
+        roleName, // filter by enum directly
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        roleName: true,
+        role: {
+          select: {
+            description: true
+          }
+        }
+      }
+    })
+
+    return { success: true, data: users }
+  } catch (error) {
+    console.error(error)
+    return { success: false, error: "Failed to fetch users" }
+  }
+}

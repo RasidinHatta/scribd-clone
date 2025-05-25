@@ -10,6 +10,31 @@ export const getAllRoles = async () => {
     }
 }
 
+export const getAllRolesWithUSer = async () => {
+    try {
+        const roles = await db.role.findMany({
+            include: {
+                users: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    },
+                },
+                _count: {
+                    select: {
+                        users: true,
+                    },
+                },
+            },
+        });
+        return roles;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+};
+
 export const getRoleById = async (id: string) => {
     try {
         const role = await db.role.findFirst({
