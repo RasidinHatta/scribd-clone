@@ -12,7 +12,7 @@ interface CommentProps {
   comment: CommentType;
   documentId: string;
   user?: User | null;
-  isReply?: boolean; // Changed from depth to simple isReply flag
+  isReply?: boolean;
   replyChain?: string[];
 }
 
@@ -35,13 +35,12 @@ const Comment: React.FC<CommentProps> = ({
     router.refresh();
   }, [router]);
 
-  // Add current comment's author to the reply chain if it's a reply
   const newReplyChain = comment.parentId 
     ? [...replyChain, comment.user?.name || "Anonymous"]
     : [];
 
   return (
-    <div className={`flex gap-3 ${isReply ? "ml-6 mt-3" : ""}`}> {/* Fixed spacing for all replies */}
+    <div className={`flex gap-3 ${isReply ? "ml-6 mt-3" : ""}`}>
       <Avatar className="w-8 h-8 mt-1">
         <AvatarImage src={comment.user?.image || undefined} />
         <AvatarFallback>
@@ -53,7 +52,7 @@ const Comment: React.FC<CommentProps> = ({
           <div className="flex items-center gap-2">
             <p className="text-sm font-medium">
               {comment.user?.name || "Anonymous"}
-              {isReply && replyChain.length > 0 && ( // Changed from depth to isReply
+              {isReply && replyChain.length > 0 && (
                 <span className="text-xs text-muted-foreground ml-2">
                   → {replyChain.join(" → ")}
                 </span>
@@ -90,14 +89,14 @@ const Comment: React.FC<CommentProps> = ({
           </div>
         )}
         {Array.isArray(comment.replies) && comment.replies.length > 0 && (
-          <div className="space-y-3"> {/* Removed mt-3 here to make spacing consistent */}
+          <div className="space-y-3">
             {comment.replies.map((reply) => (
               <Comment
                 key={reply.id}
                 comment={reply}
                 documentId={documentId}
                 user={user}
-                isReply={true} // All replies will have the same spacing
+                isReply={true} // All replies will have the same indentation
                 replyChain={newReplyChain}
               />
             ))}

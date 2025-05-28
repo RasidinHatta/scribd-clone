@@ -39,7 +39,7 @@ const CommentForm = ({
       content: "",
       documentId,
       parentId,
-      mainId: parentId ? mainId : undefined, // Only pass mainId if it's a reply
+      mainId: parentId ? mainId : undefined,
     },
   });
 
@@ -49,7 +49,7 @@ const CommentForm = ({
       ...data, 
       documentId, 
       parentId,
-      mainId: parentId ? mainId : undefined // Only pass mainId for replies
+      mainId: parentId ? mainId : undefined
     });
 
     if (res.success) {
@@ -67,11 +67,11 @@ const CommentForm = ({
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="flex items-end gap-3"
+      className="flex items-center gap-3"
     >
-      <Avatar className="w-8 h-8">
+      <Avatar className="w-10 h-10 rounded-full">
         <AvatarImage src={user?.image || ""} />
-        <AvatarFallback>
+        <AvatarFallback className="rounded-full">
           {user?.name?.[0]?.toUpperCase() || "U"}
         </AvatarFallback>
       </Avatar>
@@ -80,7 +80,7 @@ const CommentForm = ({
         {...form.register("content")}
         placeholder="Add a comment..."
         rows={1}
-        className="flex-1 resize-none text-sm px-3 py-2 h-10 max-h-20 rounded-full"
+        className="flex-1 resize-none text-sm px-3 py-2 h-10 min-h-10 max-h-20 rounded-md"
         disabled={loading}
       />
 
@@ -88,7 +88,7 @@ const CommentForm = ({
         type="submit"
         size="sm"
         disabled={loading || !form.watch("content").trim()}
-        className="rounded-full px-4"
+        className="rounded-md px-4 h-10"
       >
         {loading ? "..." : "Send"}
       </Button>
