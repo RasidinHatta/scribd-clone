@@ -36,7 +36,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
               key={comment.id}
               comment={comment}
               documentId={documentId}
-              user={user}
+              user={comment.user}
             />
           ))}
         </div>

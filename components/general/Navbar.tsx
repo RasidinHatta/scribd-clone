@@ -15,9 +15,12 @@ import { SignOutButton } from '../auth/SignOutButton'
 import { auth } from '@/auth'
 import UserAvatar from '../user/UserAvatar'
 import SearchBar from './SearchBar'
+import { RoleName } from '@/lib/generated/prisma'
 
 const Navbar = async () => {
     const session = await auth()
+    const role = session?.user?.role.name as RoleName
+    
     return (
         <header className="border-b">
             <div className="container mx-auto flex h-16 items-center justify-between px-4 gap-4">
@@ -48,12 +51,14 @@ const Navbar = async () => {
                                 >
                                     Community
                                 </Link>
-                                <Link
-                                    href="/my-documents"
-                                    className="text-lg transition-transform transform hover:scale-105 hover:text-primary"
-                                >
-                                    MyDocument
-                                </Link>
+                                {role === RoleName.USER && (
+                                    <Link
+                                        href="/my-documents"
+                                        className="text-lg transition-transform transform hover:scale-105 hover:text-primary"
+                                    >
+                                        MyDocument
+                                    </Link>
+                                )}
                             </SheetHeader>
 
                             <div className="flex-grow" />
@@ -113,12 +118,14 @@ const Navbar = async () => {
                         >
                             Community
                         </Link>
-                        <Link
-                            href="/my-documents"
-                            className="text-lg transition-transform transform hover:scale-105 hover:text-primary hidden md:inline"
-                        >
-                            MyDocument
-                        </Link>
+                        {role === RoleName.USER && (
+                            <Link
+                                href="/my-documents"
+                                className="text-lg transition-transform transform hover:scale-105 hover:text-primary hidden md:inline"
+                            >
+                                MyDocument
+                            </Link>
+                        )}
                     </div>
                 </div>
 
