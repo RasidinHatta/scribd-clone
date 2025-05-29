@@ -18,13 +18,15 @@ interface Document {
 }
 
 interface CommunityPageProps {
-  documents: Document[];
-  showActions?: boolean,
+  documents: Document[]
+  showActions?: boolean
+  showUpload?: boolean
 }
 
 const CommunityPage = ({
   documents = [],
-  showActions = false
+  showActions = false,
+  showUpload = false
 }: CommunityPageProps) => {
   return (
     <AnimatedContainer className="container mx-auto py-8 space-y-8">
@@ -35,9 +37,11 @@ const CommunityPage = ({
             Browse and discuss documents shared by the community
           </p>
         </div>
-        <Button asChild>
-          <Link href="/upload">Upload Document</Link>
-        </Button>
+        {showUpload && (
+          <Button asChild>
+            <Link href="/upload">Upload Document</Link>
+          </Button>
+        )}
       </div>
       {documents.length === 0 ? (
         <DocumentsEmpty />

@@ -2,6 +2,8 @@ import React from 'react'
 import { getCommunityDocuments } from '@/data/document'
 import { Metadata } from 'next'
 import CommunityPage from '@/components/documents/CommunityPage'
+import { auth } from '@/auth'
+import { RoleName } from '@/lib/generated/prisma'
 
 export const metadata: Metadata = {
   title: "Community | SAMS",
@@ -15,6 +17,10 @@ type CommunityPageProps = {
 const Page = async ({ searchParams }: CommunityPageProps) => {
   const params = await searchParams;
   const query = params.q?.toLowerCase() || '';
+  const session = await auth()
+  const role = session?.user?.role.name
+
+  const upload = role === RoleName.USER
 
   const documents = await getCommunityDocuments();
 
@@ -26,7 +32,7 @@ const Page = async ({ searchParams }: CommunityPageProps) => {
       )
     : documents;
 
-  return <CommunityPage documents={filteredDocuments} />;
+  return <CommunityPage documents={filteredDocuments} showUpload={upload}/>;
 };
 
 

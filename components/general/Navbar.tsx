@@ -20,7 +20,7 @@ import { RoleName } from '@/lib/generated/prisma'
 const Navbar = async () => {
     const session = await auth()
     const role = session?.user?.role.name as RoleName
-    
+
     return (
         <header className="border-b">
             <div className="container mx-auto flex h-16 items-center justify-between px-4 gap-4">
@@ -65,9 +65,11 @@ const Navbar = async () => {
 
                             {/* Bottom Section */}
                             <div className="space-y-4">
-                                <Button className="w-full justify-start" asChild>
-                                    <Link href="/upload">Upload</Link>
-                                </Button>
+                                {role === RoleName.USER && (
+                                    <Button className="w-full justify-start" asChild>
+                                        <Link href="/upload">Upload</Link>
+                                    </Button>
+                                )}
 
                                 <div className="flex items-center justify-between">
                                     {session ? (
@@ -136,10 +138,11 @@ const Navbar = async () => {
 
                 {/* Right: Desktop Navigation */}
                 <nav className="hidden md:flex items-center space-x-4">
-                    <Button asChild>
-                        <Link href="/upload">Upload</Link>
-                    </Button>
-
+                    {role === RoleName.USER && (
+                        <Button asChild>
+                            <Link href="/upload">Upload</Link>
+                        </Button>
+                    )}
                     {session ? (
                         <>
                             <DropdownMenu>

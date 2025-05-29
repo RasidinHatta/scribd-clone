@@ -24,10 +24,15 @@ const Comment: React.FC<CommentProps> = ({
   replyChain = [],
 }) => {
   const [showReply, setShowReply] = useState(false);
+  const [showReplies, setShowReplies] = useState(false); // New state for toggling replies visibility
   const router = useRouter();
   
   const toggleReply = useCallback(() => {
     setShowReply((prev) => !prev);
+  }, []);
+
+  const toggleReplies = useCallback(() => {
+    setShowReplies((prev) => !prev);
   }, []);
 
   const handleSuccess = useCallback(() => {
@@ -38,6 +43,8 @@ const Comment: React.FC<CommentProps> = ({
   const newReplyChain = comment.parentId 
     ? [...replyChain, comment.user?.name || "Anonymous"]
     : [];
+
+  const hasReplies = Array.isArray(comment.replies) && comment.replies.length > 0;
 
   return (
     <div className={`flex gap-3 ${isReply ? "ml-6 mt-3" : ""}`}>
@@ -76,6 +83,16 @@ const Comment: React.FC<CommentProps> = ({
           >
             {showReply ? "Cancel" : "Reply"}
           </Button>
+          {hasReplies && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleReplies}
+              className="text-xs text-muted-foreground h-6 px-2"
+            >
+              {showReplies ? "Hide replies" : `Show replies (${comment.replies?.length})`}
+            </Button>
+          )}
         </div>
         {showReply && user && (
           <div className="mt-3">
@@ -88,15 +105,15 @@ const Comment: React.FC<CommentProps> = ({
             />
           </div>
         )}
-        {Array.isArray(comment.replies) && comment.replies.length > 0 && (
+        {showReplies && hasReplies && (
           <div className="space-y-3">
-            {comment.replies.map((reply) => (
+            {comment.replies?.map((reply) => (
               <Comment
                 key={reply.id}
                 comment={reply}
                 documentId={documentId}
                 user={user}
-                isReply={true} // All replies will have the same indentation
+                isReply={true}
                 replyChain={newReplyChain}
               />
             ))}
