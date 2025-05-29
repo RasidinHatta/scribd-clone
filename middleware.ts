@@ -9,6 +9,7 @@ import {
   userRoute 
 } from "./route";
 import { getToken } from "next-auth/jwt";
+import { RoleName } from "./lib/generated/prisma";
 
 const { auth } = NextAuth(authConfig);
 
@@ -63,8 +64,8 @@ export default auth(async (req) => {
     return Response.redirect(`${basedUrl}/auth-error`);
   }
   
-  const role = token?.roleName;
-  const isAdmin = role === "ADMIN";
+  const role = token?.roleName as RoleName;
+  const isAdmin = role === RoleName.ADMIN;
   const isLoggedIn = !!token;
 
   // 3. Auth routes (login/register/admin-login) - redirect logged in users
@@ -85,7 +86,7 @@ export default auth(async (req) => {
   }
 
   // 6. User routes - restrict PUBLICUSER role
-  if (isLoggedIn && role === "PUBLICUSER" && isUserRoute) {
+  if (isLoggedIn && role === RoleName.PUBLICUSER && isUserRoute) {
     return Response.redirect(`${basedUrl}/access-denied`);
   }
 });

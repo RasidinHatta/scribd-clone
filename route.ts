@@ -1,7 +1,6 @@
 export const protectedRoute = [
     "/documents",
     "/profile",
-    "/upload",
     "/testPage"
 ]
 
@@ -30,5 +29,6 @@ export const adminLoginRoute = [
 ]
 
 export const userRoute = [
-    "/testUser"
+    "/testUser",
+    "/upload"
 ]
