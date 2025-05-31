@@ -1,7 +1,8 @@
 export const protectedRoute = [
     "/documents",
     "/profile",
-    "/testPage"
+    "/testPage",
+    "/upload",
 ]
 
 export const publicRoute = [
