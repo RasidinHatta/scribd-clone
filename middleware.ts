@@ -67,7 +67,6 @@ export default auth(async (req) => {
   const role = token?.roleName as RoleName;
   const isAdmin = role === RoleName.ADMIN;
   const canDownload = token?.role.createDocument
-  console.log(role, canDownload)
   const isLoggedIn = !!token;
 
   // 3. Auth routes (login/register/admin-login) - redirect logged in users
