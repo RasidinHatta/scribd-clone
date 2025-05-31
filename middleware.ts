@@ -66,7 +66,7 @@ export default auth(async (req) => {
   
   const role = token?.roleName as RoleName;
   const isAdmin = role === RoleName.ADMIN;
-  const canDownload = token?.role.createDocument
+  const canUpload = token?.role.createDocument
   const isLoggedIn = !!token;
 
   // 3. Auth routes (login/register/admin-login) - redirect logged in users
@@ -87,7 +87,7 @@ export default auth(async (req) => {
   }
 
   // 6. User routes - restrict PUBLICUSER role
-  if (isLoggedIn && !canDownload && isUserRoute) {
+  if (isLoggedIn && !canUpload && isUserRoute) {
     return Response.redirect(`${basedUrl}/access-denied`);
   }
 });
