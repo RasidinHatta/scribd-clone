@@ -18,7 +18,7 @@ interface Document {
   id: string;
   title: string;
   description: string | null;
-  subject: string;
+  subject: string | null;
   publicId: string;
   user: {
     name: string | null;
@@ -27,9 +27,9 @@ interface Document {
 }
 
 interface CommunityPageProps {
-  documents: Document[]
-  showActions?: boolean
-  showUpload?: boolean
+  documents: Document[];
+  showActions?: boolean;
+  showUpload?: boolean;
 }
 
 const CommunityPage = ({
@@ -48,10 +48,14 @@ const CommunityPage = ({
     'SECJH'
   ];
   
-  // Combine specific subjects with unique subjects from documents
-  const allSubjects = ['all', ...specificSubjects];
-  const documentSubjects = [...new Set(documents.map(doc => doc.subject))];
-  const subjects = [...new Set([...allSubjects, ...documentSubjects])];
+  // Get unique subjects from documents (filtering out null values)
+  const documentSubjects = [...new Set(
+    documents.map(doc => doc.subject).filter((subject): subject is string => subject !== null)
+  )];
+  
+  // Combine all subjects
+  const subjects = ['all', ...specificSubjects, ...documentSubjects];
+  const uniqueSubjects = [...new Set(subjects)];
   
   // Filter documents based on selected subject
   const filteredDocuments = selectedSubject === 'all' 
@@ -74,9 +78,9 @@ const CommunityPage = ({
               <SelectValue placeholder="Filter by subject" />
             </SelectTrigger>
             <SelectContent>
-              {subjects.map(subject => (
+              {uniqueSubjects.map(subject => (
                 <SelectItem key={subject} value={subject}>
-                  {subject === 'all' ? 'All' : subject}
+                  {subject === 'all' ? 'All Subjects' : subject}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -100,7 +104,7 @@ const CommunityPage = ({
               key={doc.id}
               title={doc.title}
               description={doc.description || "No description available"}
-              subject={doc.subject}
+              subject={doc.subject || "Other"}
               publicId={doc.publicId}
               author={doc.user.name || "Anonymous"}
               authorImage={doc.user.image}

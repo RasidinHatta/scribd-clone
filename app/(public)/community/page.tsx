@@ -11,18 +11,17 @@ export const metadata: Metadata = {
 }
 
 type CommunityPageProps = {
-  searchParams: Promise<{ q: string }>;
+  searchParams: { q?: string };
 }
 
 const Page = async ({ searchParams }: CommunityPageProps) => {
-  const params = await searchParams;
-  const query = params.q?.toLowerCase() || '';
+  const query = searchParams.q?.toLowerCase() || '';
   const session = await auth()
   const role = session?.user?.role.name
 
   const upload = role === RoleName.USER
 
-  const documents = await getCommunityDocuments() as [];
+  const documents = await getCommunityDocuments()
 
   const filteredDocuments = query
     ? documents.filter(
@@ -32,8 +31,7 @@ const Page = async ({ searchParams }: CommunityPageProps) => {
       )
     : documents;
 
-  return <CommunityPage documents={filteredDocuments} showUpload={upload}/>;
+  return <CommunityPage documents={filteredDocuments} showUpload={upload} />;
 };
-
 
 export default Page
