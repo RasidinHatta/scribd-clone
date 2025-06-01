@@ -4,26 +4,28 @@ import { Metadata } from 'next'
 import CommunityPage from '@/components/documents/CommunityPage'
 import { auth } from '@/auth'
 import { RoleName } from '@/lib/generated/prisma'
+import { PageProps } from '@/.next/types/app/layout'
 
 export const metadata: Metadata = {
   title: "Community | SAMS",
   description: "A document sharing platform with community discussions",
 }
 
-// Remove the SearchParams interface - let Next.js handle the typing
+interface CustomSearchParams {
+  q?: string
+}
 
 const Page = async ({ 
   searchParams 
-}: { 
-  searchParams: Record<string, string | string[] | undefined> 
+}: PageProps & { 
+  searchParams: CustomSearchParams 
 }) => {
-  const query = typeof searchParams.q === 'string' 
-    ? searchParams.q.toLowerCase() 
-    : '';
-  
+  const query = searchParams.q?.toLowerCase() || '';
   const session = await auth()
   const role = session?.user?.role.name
+
   const upload = role === RoleName.USER
+
   const documents = await getCommunityDocuments()
 
   const filteredDocuments = query
