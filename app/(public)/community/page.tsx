@@ -10,11 +10,13 @@ export const metadata: Metadata = {
   description: "A document sharing platform with community discussions",
 }
 
-type CommunityPageProps = {
-  searchParams: { q?: string };
+interface PageProps {
+  searchParams: {
+    q?: string;
+  };
 }
 
-const Page = async ({ searchParams }: CommunityPageProps) => {
+const Page = async ({ searchParams }: PageProps) => {
   const query = searchParams.q?.toLowerCase() || '';
   const session = await auth()
   const role = session?.user?.role.name
