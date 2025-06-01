@@ -18,11 +18,6 @@ export const authRoute = [
 
 export const adminRoute = [
     "/admin",
-    "/admin/test",
-    "/admin/users",
-    "/admin/documents",
-    "/admin/profile",
-    "/admin/setting",
 ]
 
 export const adminLoginRoute = [
