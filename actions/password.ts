@@ -79,6 +79,14 @@ export const resetPassword = async (data: z.infer<typeof NewPasswordSchema> & { 
       return { error: "User not found" };
     }
 
+    // Check if new password is the same as the old password (only if password exists)
+    if (user.password) {
+      const isSamePassword = await bcrypt.compare(password, user.password);
+      if (isSamePassword) {
+        return { error: "New password cannot be the same as the old password" };
+      }
+    }
+
     // Hash the new password
     const hashedPassword = await bcrypt.hash(password, 10);
 

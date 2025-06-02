@@ -122,6 +122,13 @@ const RegisterForm = () => {
               name="password"
               render={({ field }) => {
                 const { label, color, score } = getPasswordStrength(passwordInput);
+                const requirements = [
+                  { regex: /^.{8,}$/, label: "8+ characters" },
+                  { regex: /[a-z]/, label: "Lowercase letter" },
+                  { regex: /[A-Z]/, label: "Uppercase letter" },
+                  { regex: /\d/, label: "Number" },
+                  { regex: /[!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`]/, label: "Special character" },
+                ];
 
                 return (
                   <FormItem>
@@ -138,19 +145,42 @@ const RegisterForm = () => {
                       />
                     </FormControl>
 
-                    {passwordInput && (
-                      <div className="mt-2">
-                        <div className="h-2 w-full bg-gray-200 rounded">
-                          <div
-                            className={`h-full ${color} rounded transition-all duration-300`}
-                            style={{ width: `${score}%` }}
-                          ></div>
-                        </div>
-                        <p className={`text-sm mt-1 ${color.replace("bg-", "text-")}`}>
-                          Strength: {label}
-                        </p>
+                    <div className="mt-2 space-y-2">
+                      {passwordInput && (
+                        <>
+                          <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all duration-300 ${score < 40 ? 'bg-destructive' :
+                                  score < 70 ? 'bg-warning' : 'bg-success'
+                                }`}
+                              style={{ width: `${score}%` }}
+                            />
+                          </div>
+                          <p className={`text-xs ${score < 40 ? 'text-destructive' :
+                              score < 70 ? 'text-warning' : 'text-success'
+                            }`}>
+                            Strength: {label}
+                          </p>
+                        </>
+                      )}
+
+                      <div className="grid grid-cols-2 gap-1 text-xs">
+                        {requirements.map((req, i) => (
+                          <div key={i} className="flex items-center">
+                            <span className={`inline-block w-2 h-2 rounded-full mr-1 ${req.regex.test(passwordInput)
+                                ? 'bg-success'
+                                : 'bg-muted-foreground/20'
+                              }`} />
+                            <span className={req.regex.test(passwordInput)
+                              ? 'text-foreground'
+                              : 'text-muted-foreground'
+                            }>
+                              {req.label}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    )}
+                    </div>
 
                     <FormMessage />
                   </FormItem>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,9 +19,13 @@ const ResetPasswordForm = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [token, setToken] = useState<string | null>(null); // New state for token
 
     const searchParams = useSearchParams();
-    const token = searchParams.get("token");
+
+    useEffect(() => {
+        setToken(searchParams.get("token"));
+    }, [searchParams]);
 
     const form = useForm<z.infer<typeof NewPasswordSchema>>({
         resolver: zodResolver(NewPasswordSchema),
@@ -32,33 +36,54 @@ const ResetPasswordForm = () => {
     });
 
     const onSubmit = useCallback((formData: z.infer<typeof NewPasswordSchema>) => {
-        if (success || error) {
+        if (success) {
             return;
         }
 
         if (!token) {
             setError("No token provided");
+            form.reset();
             return;
         }
 
         setLoading(true);
+        setError("");
 
-        resetPassword({ ...formData, token })  // Pass token along with form data
+        resetPassword({ ...formData, token })
             .then((data) => {
                 if (data.success) {
                     setSuccess(data.success);
-                    setError(""); // Clear previous error
+                    setError("");
                 } else if (data.error) {
                     setError(data.error);
+                    form.reset();
                 }
-                setLoading(false);
             })
             .catch((error) => {
                 console.error(error);
                 setError("An unexpected error occurred");
+                form.reset();
+            })
+            .finally(() => {
                 setLoading(false);
             });
-    }, [token, success, error]);
+    }, [token, success, form]);
+
+    // Optional: Show loading state while token is being retrieved
+    if (token === null) {
+        return (
+            <CardWrapper
+                headerLabel="Choose a new password"
+                title="Reset Password"
+                backButtonHref="/login"
+                backButtonLabel="Back to login"
+            >
+                <div className="flex justify-center items-center p-6">
+                    Loading token...
+                </div>
+            </CardWrapper>
+        );
+    }
 
     return (
         <CardWrapper
@@ -73,15 +98,57 @@ const ResetPasswordForm = () => {
                         <FormField
                             control={form.control}
                             name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>New Password</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} placeholder="********" type="password" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
+                            render={({ field }) => {
+                                const requirements = [
+                                    { regex: /^.{8,}$/, label: "8+ characters" },
+                                    { regex: /[a-z]/, label: "Lowercase letter" },
+                                    { regex: /[A-Z]/, label: "Uppercase letter" },
+                                    { regex: /\d/, label: "Number" },
+                                    { regex: /[!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`]/, label: "Special character" },
+                                ];
+
+                                const metCount = requirements.filter(req => req.regex.test(field.value)).length;
+                                const strength = (metCount / requirements.length) * 100;
+
+                                return (
+                                    <FormItem>
+                                        <FormLabel>New Password</FormLabel>
+                                        <FormControl>
+                                            <Input {...field} placeholder="********" type="password" />
+                                        </FormControl>
+                                        <div className="mt-2">
+                                            <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full transition-all duration-300"
+                                                    style={{
+                                                        width: `${strength}%`,
+                                                        backgroundColor: `hsl(var(--${strength < 40 ? 'destructive' :
+                                                                strength < 70 ? 'warning' : 'success'
+                                                            }))`
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-1 mt-2 text-xs">
+                                                {requirements.map((req, i) => (
+                                                    <div key={i} className="flex items-center">
+                                                        <span className={`inline-block w-2 h-2 rounded-full mr-1 ${req.regex.test(field.value)
+                                                                ? 'bg-success'
+                                                                : 'bg-muted-foreground/20'
+                                                            }`} />
+                                                        <span className={req.regex.test(field.value)
+                                                            ? 'text-foreground'
+                                                            : 'text-muted-foreground'
+                                                        }>
+                                                            {req.label}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                );
+                            }}
                         />
                         <FormField
                             control={form.control}
@@ -100,7 +167,7 @@ const ResetPasswordForm = () => {
                     <FormSuccess message={success} />
                     <FormError message={error} />
                     <Button type="submit" className="w-full" disabled={loading}>
-                        {loading ? "Reseting..." : "Reset Password"}
+                        {loading ? "Resetting..." : "Reset Password"}
                     </Button>
                 </form>
             </Form>
