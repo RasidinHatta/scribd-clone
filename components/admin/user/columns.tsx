@@ -97,6 +97,7 @@ export const userColumns: ColumnDef<User>[] = [
         userId={row.original.id}
         userName={row.original.name || ""}
         userEmail={row.original.email}
+        userRole={row.original.roleName}
       />
     ),
   },

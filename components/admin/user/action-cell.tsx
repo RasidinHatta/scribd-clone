@@ -1,4 +1,3 @@
-
 import { deleteUserById, editUserById, getUserById } from "@/actions/admin/user"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { RoleName } from "@/lib/generated/prisma"
 import { MoreHorizontal } from "lucide-react"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
@@ -32,7 +32,7 @@ type UserDetails = {
   emailVerified: Date | null
   image: string | null
   twoFactorEnabled: boolean
-  roleName: string // Changed from RoleName to string
+  roleName: string
   createdAt: Date
   updatedAt: Date
 }
@@ -41,10 +41,12 @@ function ActionCell({
   userId,
   userName,
   userEmail,
+  userRole,
 }: {
   userId: string
   userName: string
   userEmail: string
+  userRole: RoleName
 }) {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
@@ -54,6 +56,7 @@ function ActionCell({
 
   const [name, setName] = useState(userName)
   const [email] = useState(userEmail)
+  const [roleName, setRoleName] = useState(userRole)
 
   const loadUserDetails = () => {
     startTransition(async () => {
@@ -88,7 +91,7 @@ function ActionCell({
   const onConfirmEdit = (e: React.FormEvent) => {
     e.preventDefault()
     startTransition(async () => {
-      const res = await editUserById(userId, { name })
+      const res = await editUserById(userId, { name, roleName })
       if (res.success) {
         toast.success("User updated successfully")
         setEditOpen(false)
@@ -105,6 +108,8 @@ function ActionCell({
   const formatBoolean = (value: boolean) => {
     return value ? 'Yes' : 'No'
   }
+
+  const availableRoles: RoleName[] = ["ADMIN", "USER", "PUBLICUSER"];
 
   return (
     <>
@@ -274,6 +279,21 @@ function ActionCell({
                 disabled
                 className="opacity-70"
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role">Role</Label>
+              <select
+                id="role"
+                value={roleName}
+                onChange={(e) => setRoleName(e.target.value as RoleName)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {availableRoles.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
             </div>
             <DialogFooter>
               <DialogClose asChild>
