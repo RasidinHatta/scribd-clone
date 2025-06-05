@@ -13,7 +13,10 @@ export const publicRoute = [
 
 export const authRoute = [
     "/login",
-    "/register"
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+    "/verify-email",
 ]
 
 export const adminRoute = [
