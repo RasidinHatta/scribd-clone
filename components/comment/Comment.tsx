@@ -17,6 +17,11 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "../ui/dialog";
+import ReactMarkdown from "react-markdown";
+import { PrismAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 interface CommentProps {
   comment: CommentType;
@@ -101,9 +106,106 @@ const Comment: React.FC<CommentProps> = ({
               {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
             </span>
           </div>
-          <p className="text-sm text-muted-foreground whitespace-pre-wrap mt-1">
-            {comment.content}
-          </p>
+          <div className="mt-1 text-sm text-muted-foreground">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              components={{
+                code({ node, className, children, ...props }) {
+                  const isInline = (props as any).inline;
+                  const match = /language-(\w+)/.exec(className || "");
+                  return !isInline && match ? (
+                    <SyntaxHighlighter
+                      language={match[1]}
+                      // @ts-ignore
+                      style={oneDark}
+                      customStyle={{ backgroundColor: "transparent" }}
+                      PreTag="div"
+                      className="rounded-md text-sm my-2"
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, "")}
+                    </SyntaxHighlighter>
+                  ) : (
+                    <code className="bg-muted px-1 py-0.5 rounded text-sm">
+                      {children}
+                    </code>
+                  );
+                },
+                a({ node, href, children, ...props }) {
+                  return (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                      {...props}
+                    >
+                      {children}
+                    </a>
+                  );
+                },
+                blockquote({ node, children, ...props }) {
+                  return (
+                    <blockquote className="border-l-4 border-muted-foreground pl-3 italic my-2">
+                      {children}
+                    </blockquote>
+                  );
+                },
+                ul({ node, children, ...props }) {
+                  return (
+                    <ul className="list-disc pl-5 my-2" {...props}>
+                      {children}
+                    </ul>
+                  );
+                },
+                ol({ node, children, ...props }) {
+                  return (
+                    <ol className="list-decimal pl-5 my-2" {...props}>
+                      {children}
+                    </ol>
+                  );
+                },
+                h1({ node, children, ...props }) {
+                  return (
+                    <h1 className="text-xl font-bold my-2" {...props}>
+                      {children}
+                    </h1>
+                  );
+                },
+                h2({ node, children, ...props }) {
+                  return (
+                    <h2 className="text-lg font-bold my-2" {...props}>
+                      {children}
+                    </h2>
+                  );
+                },
+                h3({ node, children, ...props }) {
+                  return (
+                    <h3 className="text-base font-bold my-2" {...props}>
+                      {children}
+                    </h3>
+                  );
+                },
+                strong({ node, children, ...props }) {
+                  return (
+                    <strong className="font-semibold" {...props}>
+                      {children}
+                    </strong>
+                  );
+                },
+                em({ node, children, ...props }) {
+                  return (
+                    <em className="italic" {...props}>
+                      {children}
+                    </em>
+                  );
+                },
+              }}
+            >
+              {comment.content}
+            </ReactMarkdown>
+          </div>
         </div>
         <div className="flex gap-3 mt-1">
           <Button
