@@ -15,11 +15,10 @@ import { SignOutButton } from '../auth/SignOutButton'
 import { auth } from '@/auth'
 import UserAvatar from '../user/UserAvatar'
 import SearchBar from './SearchBar'
-import { RoleName } from '@/lib/generated/prisma'
 
 const Navbar = async () => {
     const session = await auth()
-    const role = session?.user?.role.name as RoleName
+    const canUpload = session?.user?.role.createDocument
 
     return (
         <header className="border-b">
@@ -51,7 +50,7 @@ const Navbar = async () => {
                                 >
                                     Community
                                 </Link>
-                                {role === RoleName.USER && (
+                                {canUpload && (
                                     <Link
                                         href="/my-documents"
                                         className="text-lg transition-transform transform hover:scale-105 hover:text-primary"
@@ -65,7 +64,7 @@ const Navbar = async () => {
 
                             {/* Bottom Section */}
                             <div className="space-y-4">
-                                {role === RoleName.USER && (
+                                {canUpload && (
                                     <Button className="w-full justify-start" asChild>
                                         <Link href="/upload">Upload</Link>
                                     </Button>
@@ -120,7 +119,7 @@ const Navbar = async () => {
                         >
                             Community
                         </Link>
-                        {role === RoleName.USER && (
+                        {canUpload && (
                             <Link
                                 href="/my-documents"
                                 className="text-lg transition-transform transform hover:scale-105 hover:text-primary hidden md:inline"
@@ -138,11 +137,12 @@ const Navbar = async () => {
 
                 {/* Right: Desktop Navigation */}
                 <nav className="hidden md:flex items-center space-x-4">
-                    {role === RoleName.USER && (
+                    {canUpload && (
                         <Button asChild className='text-secondary'>
                             <Link href="/upload">Upload</Link>
                         </Button>
                     )}
+                    
                     {session ? (
                         <>
                             <DropdownMenu>
