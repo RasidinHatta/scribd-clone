@@ -87,7 +87,7 @@ export default auth(async (req) => {
   }
 
   // 6. User routes - restrict PUBLICUSER role
-  if (isLoggedIn && !canUpload && isUserRoute) {
+  if (isLoggedIn && !canUpload) {
     return Response.redirect(`${basedUrl}/access-denied`);
   }
 });
