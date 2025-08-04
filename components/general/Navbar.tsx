@@ -16,15 +16,35 @@ import { auth } from '@/auth'
 import UserAvatar from '../user/UserAvatar'
 import SearchBar from './SearchBar'
 
+/**
+ * Navbar Component
+ * 
+ * The main navigation bar that appears at the top of every page.
+ * Features responsive design with:
+ * - Mobile hamburger menu (on small screens)
+ * - Desktop navigation (on larger screens)
+ * - Search functionality
+ * - User authentication controls
+ * - Theme toggle
+ * 
+ * Behavior:
+ * - Shows different navigation items based on user role/permissions
+ * - Displays authentication buttons when user is logged out
+ * - Shows user avatar and dropdown when logged in
+ */
 const Navbar = async () => {
+    // Get current session data
     const session = await auth()
+    // Check if user has permission to upload documents
     const canUpload = session?.user?.role.createDocument
 
     return (
         <header className="border-b">
+            {/* Main container */}
             <div className="container mx-auto flex h-16 items-center justify-between px-4 gap-4">
-                {/* Left: Logo and Mobile Menu */}
+                {/* Left section: Logo and Mobile Menu */}
                 <div className="flex items-center">
+                    {/* Mobile hamburger menu (only visible on small screens) */}
                     <Sheet>
                         <SheetTrigger asChild>
                             <Button
@@ -36,20 +56,24 @@ const Navbar = async () => {
                             </Button>
                         </SheetTrigger>
 
+                        {/* Mobile menu content */}
                         <SheetContent side="left" className="w-64 p-4 flex flex-col">
                             <SheetHeader>
+                                {/* App logo */}
                                 <Link
                                     href="/"
                                     className="font-bold text-lg transition-transform transform hover:scale-105 hover:text-primary"
                                 >
                                     <SheetTitle>[S][A]</SheetTitle>
                                 </Link>
+                                {/* Navigation links */}
                                 <Link
                                     href="/community"
                                     className="text-lg transition-transform transform hover:scale-105 hover:text-primary"
                                 >
                                     Community
                                 </Link>
+                                {/* Conditional link based on user permissions */}
                                 {canUpload && (
                                     <Link
                                         href="/my-documents"
@@ -60,18 +84,22 @@ const Navbar = async () => {
                                 )}
                             </SheetHeader>
 
+                            {/* Spacer to push bottom content down */}
                             <div className="flex-grow" />
 
-                            {/* Bottom Section */}
+                            {/* Bottom section of mobile menu */}
                             <div className="space-y-4">
+                                {/* Upload button (conditional) */}
                                 {canUpload && (
                                     <Button className="w-full justify-start" asChild>
                                         <Link href="/upload">Upload</Link>
                                     </Button>
                                 )}
 
+                                {/* User controls */}
                                 <div className="flex items-center justify-between">
                                     {session ? (
+                                        // Logged-in user menu
                                         <>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
@@ -90,6 +118,7 @@ const Navbar = async () => {
                                             </DropdownMenu>
                                         </>
                                     ) : (
+                                        // Logged-out buttons
                                         <>
                                             <Button asChild variant="outline">
                                                 <Link href="/login">Login</Link>
@@ -99,6 +128,7 @@ const Navbar = async () => {
                                             </Button>
                                         </>
                                     )}
+                                    {/* Theme toggle */}
                                     <div className="ml-2 scale-90">
                                         <ModeToggle />
                                     </div>
@@ -106,6 +136,8 @@ const Navbar = async () => {
                             </div>
                         </SheetContent>
                     </Sheet>
+
+                    {/* Desktop logo and navigation links (hidden on mobile) */}
                     <div className='flex gap-4'>
                         <Link
                             href="/"
@@ -130,20 +162,23 @@ const Navbar = async () => {
                     </div>
                 </div>
 
-                {/* Middle: SearchBar - always visible */}
+                {/* Middle section: SearchBar (always visible) */}
                 <div className="flex-1">
                     <SearchBar />
                 </div>
 
-                {/* Right: Desktop Navigation */}
+                {/* Right section: Desktop Navigation (hidden on mobile) */}
                 <nav className="hidden md:flex items-center space-x-4">
+                    {/* Conditional upload button */}
                     {canUpload && (
                         <Button asChild className='text-secondary'>
                             <Link href="/upload">Upload</Link>
                         </Button>
                     )}
                     
+                    {/* User controls */}
                     {session ? (
+                        // Logged-in user dropdown
                         <>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -162,6 +197,7 @@ const Navbar = async () => {
                             </DropdownMenu>
                         </>
                     ) : (
+                        // Logged-out buttons
                         <>
                             <Button asChild variant="outline">
                                 <Link href="/login">Login</Link>
@@ -171,6 +207,7 @@ const Navbar = async () => {
                             </Button>
                         </>
                     )}
+                    {/* Theme toggle */}
                     <ModeToggle />
                 </nav>
             </div>
