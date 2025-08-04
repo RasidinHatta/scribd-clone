@@ -1,3 +1,11 @@
+/**
+ * Source: /components/admin/user/columns.tsx
+ *
+ * This file defines the column configuration for the admin user table.
+ * It includes sorting, formatting, and custom cell rendering for user data.
+ * The ActionCell component provides row-level actions (view, edit, delete).
+ */
+
 "use client"
 
 import { User } from "@/lib/generated/prisma/client"

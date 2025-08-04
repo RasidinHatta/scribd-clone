@@ -1,3 +1,12 @@
+/**
+ * Source: /components/admin/comments/action-cell.tsx
+ *
+ * This component renders action controls for a comment row in the admin panel.
+ * It provides dropdown actions to view, edit, or delete a comment, view replies, and show related document/user details.
+ * Dialogs are used for viewing comment details, confirming deletion, editing comment content, and displaying replies, document, and user info.
+ * Comment, document, user, and reply data are fetched and updated via server actions.
+ */
+
 "use client"
 
 import { deleteCommentById, editCommentById, getCommentById, getDocumentByCommentId, getRepliesByCommentId, getUserById } from "@/actions/admin/comment"
@@ -29,7 +38,6 @@ import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import { PrismAsync as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism"
-import { deleteComment } from "@/actions/comment"
 
 interface CommentActionCellProps {
   commentId: string

@@ -3,8 +3,14 @@
 import db from "@/prisma/prisma"
 import { revalidatePath } from "next/cache"
 
+/**
+ * Deletes a user by their unique ID.
+ * After deletion, revalidates the /admin/users path to update the UI.
+ * @param userId - The unique identifier of the user to delete.
+ * @returns Success status or error message.
+ */
 export const deleteUserById = async (userId: string) => {
- try {
+  try {
     await db.user.delete({
       where: { id: userId }
     })
@@ -17,7 +23,12 @@ export const deleteUserById = async (userId: string) => {
   }
 }
 
-// app/actions/admin/user.ts
+/**
+ * Fetches a user by their unique ID.
+ * Converts createdAt and updatedAt to ISO strings for serialization.
+ * @param userId - The unique identifier of the user to fetch.
+ * @returns Success status and user data, or error message.
+ */
 export const getUserById = async (userId: string) => {
   try {
     const user = await db.user.findUnique({
@@ -42,14 +53,21 @@ export const getUserById = async (userId: string) => {
   }
 }
 
-
+/**
+ * Updates a user's details by their unique ID.
+ * Supports updating name, email, password, image, two-factor status, and role.
+ * Updates the updatedAt timestamp and revalidates the /admin/users path.
+ * @param userId - The unique identifier of the user to update.
+ * @param data - Partial user data to update.
+ * @returns Success status or error message.
+ */
 export const editUserById = async (userId: string, data: {
   name?: string | null,
   email?: string,
   password?: string | null,
   image?: string | null,
   twoFactorEnabled?: boolean,
-  roleName?: "USER" | "ADMIN" | "PUBLICUSER"  // adjust as needed
+  roleName?: "USER" | "ADMIN" | "PUBLICUSER"
 }) => {
   try {
     await db.user.update({
@@ -70,11 +88,17 @@ export const editUserById = async (userId: string, data: {
   }
 }
 
+/**
+ * Fetches users filtered by their role name.
+ * Returns basic user info and role description.
+ * @param roleName - The role name to filter users by ("ADMIN", "USER", "PUBLICUSER").
+ * @returns Success status and array of users, or error message.
+ */
 export async function getUsersByRoleName(roleName: "ADMIN" | "USER" | "PUBLICUSER") {
   try {
     const users = await db.user.findMany({
       where: {
-        roleName, // filter by enum directly
+        roleName,
       },
       select: {
         id: true,

@@ -1,3 +1,12 @@
+/**
+ * Source: /components/admin/documents/action-cell.tsx
+ *
+ * This component renders action controls for a document row in the admin panel.
+ * It provides dropdown actions to view, edit, or delete a document, and view comments.
+ * Dialogs are used for viewing document details, confirming deletion, editing document info, and displaying comments.
+ * Document and comment data are fetched and updated via server actions.
+ */
+
 "use client"
 
 import { deleteDocumentById, editDocumentById, getDocumentById, getDocumentComments } from "@/actions/admin/document"

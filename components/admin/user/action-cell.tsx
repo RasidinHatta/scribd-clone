@@ -1,3 +1,12 @@
+/**
+ * Source: /components/admin/user/action-cell.tsx
+ *
+ * This component renders action controls for a user row in the admin panel.
+ * It provides dropdown actions to view, edit, or delete a user.
+ * Dialogs are used for viewing user details, confirming deletion, and editing user info.
+ * User data is fetched and updated via server actions.
+ */
+
 import { deleteUserById, editUserById, getUserById } from "@/actions/admin/user"
 import { Button } from "@/components/ui/button"
 import {
@@ -109,7 +118,7 @@ function ActionCell({
     return value ? 'Yes' : 'No'
   }
 
-  const availableRoles: RoleName[] = ["ADMIN", "USER", "PUBLICUSER"];
+  const availableRoles: RoleName[] = ["USER", "PUBLICUSER"];
 
   return (
     <>

@@ -1,3 +1,11 @@
+/**
+ * Source: /components/admin/comments/data-table.tsx
+ *
+ * This file defines a reusable CommentsDataTable component for displaying tabular comment data in the admin panel.
+ * It supports sorting, filtering, pagination, and column visibility toggling using @tanstack/react-table.
+ * The table is styled with custom UI components and provides a global search for content, author, and document title.
+ */
+
 "use client"
 
 import * as React from "react"

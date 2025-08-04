@@ -1,3 +1,11 @@
+/**
+ * Source: /components/admin/comments/columns.tsx
+ *
+ * This file defines the column configuration for the admin comments table.
+ * It includes sorting, formatting, and custom cell rendering for comment data.
+ * The CommentActionCell component provides row-level actions (view, edit, delete, replies, document/user details).
+ */
+
 "use client"
 
 import { Button } from "@/components/ui/button"

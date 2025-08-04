@@ -1,3 +1,11 @@
+/**
+ * Source: /components/admin/documents/columns.tsx
+ *
+ * This file defines the column configuration for the admin documents table.
+ * It includes sorting, formatting, and custom cell rendering for document data.
+ * The DocumentActionCell component provides row-level actions (view, edit, delete, comments).
+ */
+
 "use client"
 
 import { Button } from "@/components/ui/button"

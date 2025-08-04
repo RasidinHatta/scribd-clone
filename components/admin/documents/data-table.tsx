@@ -1,3 +1,11 @@
+/**
+ * Source: /components/admin/documents/data-table.tsx
+ *
+ * This file defines a reusable DataTable component for displaying tabular document data in the admin panel.
+ * It supports sorting, filtering, pagination, and column visibility toggling using @tanstack/react-table.
+ * The table is styled with custom UI components and provides a global search for title and description.
+ */
+
 "use client"
 
 import * as React from "react"

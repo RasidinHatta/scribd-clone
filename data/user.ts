@@ -1,5 +1,11 @@
 import db from "@/prisma/prisma"
 
+//source : /data/user.ts
+
+/**
+ * Fetches all users from the database.
+ * @returns Array of user objects or null if an error occurs.
+ */
 export const getAllUser = async () => {
     try {
         const user = await db.user.findMany()
@@ -10,6 +16,11 @@ export const getAllUser = async () => {
     }
 }
 
+/**
+ * Fetches all users except those with the "ADMIN" role.
+ * Results are sorted by name in ascending order.
+ * @returns Array of user objects or null if an error occurs.
+ */
 export const getAllUserWithRole = async () => {
     try {
         const users = await db.user.findMany({
@@ -28,6 +39,12 @@ export const getAllUserWithRole = async () => {
         return null;
     }
 };
+
+/**
+ * Fetches a user by their unique ID, including their role information.
+ * @param id - The user's unique identifier.
+ * @returns User object with role info or null if not found or error occurs.
+ */
 export const getUserById = async (id: string) => {
     try {
         const user = await db.user.findUnique({
@@ -43,6 +60,12 @@ export const getUserById = async (id: string) => {
     }
 }
 
+/**
+ * Fetches a user by their email address.
+ * Converts email to lowercase before querying.
+ * @param email - The user's email address.
+ * @returns User object or null if not found or error occurs.
+ */
 export const getUserByEmail = async (email: string) => {
     try {
         const lowerCaseEmail = email.toLowerCase();
