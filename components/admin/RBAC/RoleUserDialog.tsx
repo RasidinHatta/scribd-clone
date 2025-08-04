@@ -1,3 +1,4 @@
+// RoleUserDialog.tsx
 "use client"
 
 import { useEffect, useState } from "react"
@@ -13,12 +14,21 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
+/**
+ * Props for RoleUserDialog component
+ * @param open - Controls dialog visibility
+ * @param onOpenChange - Callback for dialog visibility changes
+ * @param roleName - The name of the role to fetch users for
+ */
 interface RoleUserDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   roleName: "ADMIN" | "USER" | "PUBLICUSER"
 }
 
+/**
+ * User type with minimal information needed for display
+ */
 interface User {
   id: string
   name: string | null
@@ -29,10 +39,15 @@ interface User {
   }
 }
 
+/**
+ * Dialog component that displays users assigned to a specific role
+ * Fetches user data when opened and displays in a scrollable list
+ */
 const RoleUserDialog = ({ open, onOpenChange, roleName }: RoleUserDialogProps) => {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Fetch users when dialog opens
   useEffect(() => {
     if (!open) return
 
@@ -58,6 +73,7 @@ const RoleUserDialog = ({ open, onOpenChange, roleName }: RoleUserDialogProps) =
           </DialogDescription>
         </DialogHeader>
 
+        {/* Loading state */}
         {loading ? (
           <div className="flex justify-center py-8 text-sm">Loading...</div>
         ) : users.length === 0 ? (

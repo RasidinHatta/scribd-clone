@@ -1,3 +1,4 @@
+// RoleTable.tsx
 "use client";
 
 import {
@@ -23,7 +24,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Define RoleRelation
+/**
+ * Extended Role type that includes user relationships
+ */
 export type RoleRelation = Role & {
     users: Pick<User, "id" | "name" | "email">[];
     _count?: {
@@ -31,16 +34,27 @@ export type RoleRelation = Role & {
     };
 };
 
-// Define the props using RoleRelation
+/**
+ * Props for RolesTable component
+ * @param roles - Array of RoleRelation objects to display
+ */
 export interface RolesTableProps {
     roles: RoleRelation[];
 }
 
+/**
+ * Table component for displaying and managing roles
+ * Includes functionality for editing roles and viewing assigned users
+ */
 export function RolesTable({ roles: initialRoles }: RolesTableProps) {
     const [roles, setRoles] = useState(initialRoles);
     const [editOpenRoleId, setEditOpenRoleId] = useState<string | null>(null)
     const [userDialogRoleId, setUserDialogRoleId] = useState<string | null>(null)
 
+    /**
+     * Callback for when a role is updated
+     * @param updatedRole - The updated role object
+     */
     const handleRoleUpdated = (updatedRole: Role) => {
         setRoles((prevRoles) =>
             prevRoles.map((role) =>
@@ -115,6 +129,7 @@ export function RolesTable({ roles: initialRoles }: RolesTableProps) {
                             <Badge variant="outline">{role._count?.users || 0} users</Badge>
                         </TableCell>
                         <TableCell className="text-right">
+                            {/* Actions dropdown menu */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="h-8 w-8 p-0">
@@ -140,6 +155,7 @@ export function RolesTable({ roles: initialRoles }: RolesTableProps) {
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
+                            {/* Edit Role Dialog */}
                             <RoleEditDialog
                                 role={role}
                                 open={editOpenRoleId === role.id}
@@ -149,6 +165,7 @@ export function RolesTable({ roles: initialRoles }: RolesTableProps) {
                                 onRoleUpdated={handleRoleUpdated}
                             />
 
+                            {/* View Users Dialog */}
                             <RoleUserDialog
                                 open={userDialogRoleId === role.id}
                                 onOpenChange={(open) => {

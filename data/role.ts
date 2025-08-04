@@ -1,5 +1,9 @@
 import db from "@/prisma/prisma"
 
+/**
+ * Fetches all roles from the database.
+ * @returns Array of roles or null if an error occurs.
+ */
 export const getAllRoles = async () => {
     try {
         const roles = await db.role.findMany()
@@ -10,6 +14,10 @@ export const getAllRoles = async () => {
     }
 }
 
+/**
+ * Fetches all roles except "ADMIN" and includes associated users and user count.
+ * @returns Array of roles with user info or null if an error occurs.
+ */
 export const getAllRolesWithUSer = async () => {
     try {
         const roles = await db.role.findMany({
@@ -40,6 +48,11 @@ export const getAllRolesWithUSer = async () => {
     }
 };
 
+/**
+ * Fetches a role by its unique ID.
+ * @param id - The role's unique identifier.
+ * @returns The role object or null if not found or error occurs.
+ */
 export const getRoleById = async (id: string) => {
     try {
         const role = await db.role.findFirst({
@@ -54,6 +67,10 @@ export const getRoleById = async (id: string) => {
     }
 }
 
+/**
+ * Returns a map of role IDs to role names.
+ * @returns An object mapping role IDs to names, or empty object if error occurs.
+ */
 export const getRoleMap = async () => {
     try {
         const roles = await db.role.findMany({

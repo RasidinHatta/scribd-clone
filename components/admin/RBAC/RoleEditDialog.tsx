@@ -1,3 +1,4 @@
+// RoleEditDialog.tsx
 "use client"
 
 import {
@@ -18,6 +19,13 @@ import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import { editRoleById } from "@/actions/admin/role"
 
+/**
+ * Props for the RoleEditDialog component
+ * @param role - The role object to edit
+ * @param open - Boolean to control dialog visibility
+ * @param onOpenChange - Callback for dialog visibility changes
+ * @param onRoleUpdated - Optional callback when role is successfully updated
+ */
 interface RoleEditDialogProps {
     role: Role
     open: boolean
@@ -25,9 +33,14 @@ interface RoleEditDialogProps {
     onRoleUpdated?: (updatedRole: Role) => void
 }
 
+/**
+ * A dialog component for editing role details and permissions
+ * Allows updating role description and various document/comment permissions
+ */
 export function RoleEditDialog({ role, open, onOpenChange, onRoleUpdated }: RoleEditDialogProps) {
     const [isPending, startTransition] = useTransition()
 
+    // Form state management
     const [name, setName] = useState(role.name)
     const [description, setDescription] = useState(role.description || "")
     const [documentPermissions, setDocumentPermissions] = useState({
@@ -43,6 +56,10 @@ export function RoleEditDialog({ role, open, onOpenChange, onRoleUpdated }: Role
         delete: role.deleteComment,
     })
 
+    /**
+     * Handles form submission to update role
+     * @param e - Form event
+     */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
 
@@ -81,7 +98,7 @@ export function RoleEditDialog({ role, open, onOpenChange, onRoleUpdated }: Role
 
                 <form onSubmit={handleSubmit}>
                     <div className="grid gap-4 py-4">
-                        {/* Basic Info */}
+                        {/* Basic Info Section */}
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Role Name
@@ -102,7 +119,7 @@ export function RoleEditDialog({ role, open, onOpenChange, onRoleUpdated }: Role
                             />
                         </div>
 
-                        {/* Document Permissions */}
+                        {/* Document Permissions Section */}
                         <div className="grid grid-cols-4 items-start gap-4">
                             <Label className="text-right pt-2">Document Permissions</Label>
                             <div className="col-span-3 space-y-2">
@@ -126,7 +143,7 @@ export function RoleEditDialog({ role, open, onOpenChange, onRoleUpdated }: Role
                             </div>
                         </div>
 
-                        {/* Comment Permissions */}
+                        {/* Comment Permissions Section */}
                         <div className="grid grid-cols-4 items-start gap-4">
                             <Label className="text-right pt-2">Comment Permissions</Label>
                             <div className="col-span-3 space-y-2">
