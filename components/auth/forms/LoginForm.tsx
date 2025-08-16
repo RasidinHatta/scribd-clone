@@ -70,7 +70,6 @@ const LoginForm = () => {
             title="Login"
             backButtonHref="/register"
             backButtonLabel="Dont have an account?"
-            showSocial
         >
             {/* Main form container */}
             <Form {...form}>

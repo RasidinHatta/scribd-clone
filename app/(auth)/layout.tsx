@@ -1,4 +1,6 @@
+import { ForceDarkMode } from '@/components/theme/ForceDarkMode'
 import React, { Suspense } from 'react'
+import Image from 'next/image'
 
 const AuthLayout = async ({
     children
@@ -6,14 +8,31 @@ const AuthLayout = async ({
     children: React.ReactNode
 }) => {
     return (
-        <section className='w-full relative'>
-            {/* Background grid */}
-            <div className="absolute inset-0 -z-10 w-full h-full bg-[linear-gradient(135deg,_#ff6ec4,_#7873f5,_#4ade80),_repeating-linear-gradient(to_right,_rgba(0,0,0,0.1)_0px,_rgba(0,0,0,0.1)_2px,_transparent_2px,_transparent_40px),_repeating-linear-gradient(to_bottom,_rgba(0,0,0,0.1)_0px,_rgba(0,0,0,0.1)_2px,_transparent_2px,_transparent_40px)] bg-[size:auto,_40px_40px,_40px_40px]">
+        <section className='w-full relative h-screen dark'>
+            {/* Background with optimized Next.js Image */}
+            <div className="absolute inset-0 -z-10 overflow-hidden">
+                <picture>
+                    <source srcSet="/background/authBackground.avif" type="image/avif" />
+                    <source srcSet="/background/authBackground.webp" type="image/webp" />
+                    <Image
+                        src="/background/authBackground.jpg"
+                        alt="Abstract background"
+                        className="h-full w-full object-cover"
+                        fill
+                        priority={false}
+                        quality={80}
+                        sizes="100vw"
+                    />
+                </picture>
+                <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" />
             </div>
-            {/* Centered content */}
+
+            {/* Centered content with proper min-height */}
             <div className="h-screen flex items-center justify-center">
                 <Suspense fallback={<div>Loading...</div>}>
-                    {children}
+                    <ForceDarkMode>
+                        {children}
+                    </ForceDarkMode>
                 </Suspense>
             </div>
         </section>

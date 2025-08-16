@@ -95,7 +95,6 @@ const UploadForm = () => {
       title="Upload Document"
       backButtonHref="/"
       backButtonLabel="Back to Home Page"
-      showSocial={false}
       className="w-full"
     >
       <Form {...form}>
