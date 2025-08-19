@@ -32,7 +32,11 @@ export default function Home() {
               Get Started
             </Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="rounded-full px-8 transition-all duration-300 hover:scale-105 hover:bg-accent hover:text-accent-foreground">
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full px-8 transition-all duration-300 hover:scale-105 hover:bg-accent hover:text-accent-foreground bg-foreground text-background"
+          >
             <Link href="/community">
               Browse Documents
             </Link>
