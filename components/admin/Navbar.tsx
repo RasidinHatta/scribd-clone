@@ -8,6 +8,7 @@ import { ModeToggle } from '../theme/ModeToggle'
 import { Button } from '../ui/button'
 import UserAvatar from '../user/UserAvatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { ThemeSelector } from '../theme/theme-selector'
 
 const Navbar = async () => {
     const session = await auth()
@@ -65,8 +66,9 @@ const Navbar = async () => {
                                             </Button>
                                         </>
                                     )}
-                                    <div className="ml-2 scale-90">
+                                    <div className="ml-2 scale-90 gap-2">
                                         <ModeToggle />
+                                        <ThemeSelector />
                                     </div>
                                 </div>
                             </div>
@@ -106,6 +108,7 @@ const Navbar = async () => {
                         </>
                     )}
                     <ModeToggle />
+                    <ThemeSelector />
                 </nav>
             </div>
         </header>

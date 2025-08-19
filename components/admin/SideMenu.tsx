@@ -13,11 +13,11 @@ const SideMenu = async () => {
                     <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
                         Manage
                     </h2>
-                    <div className="space-y-1">
+                    <div className="space-y-1 gap-2">
                         <Button
                             asChild
                             variant="ghost"
-                            className="w-full justify-start flex gap-2"
+                            className="w-full justify-start flex gap-2 bg-primary"
                         >
                             <Link href="/admin">
                                 <FiHome className="h-4 w-4" />
@@ -27,7 +27,7 @@ const SideMenu = async () => {
                         <Button
                             asChild
                             variant="ghost"
-                            className="w-full justify-start flex gap-2"
+                            className="w-full justify-start flex gap-2 bg-primary"
                         >
                             <Link href="/admin/documents">
                                 <FaFileAlt className="h-4 w-4" />
@@ -37,7 +37,7 @@ const SideMenu = async () => {
                         <Button
                             asChild
                             variant="ghost"
-                            className="w-full justify-start flex gap-2"
+                            className="w-full justify-start flex gap-2 bg-primary"
                         >
                             <Link href="/admin/users">
                                 <FiUsers className="h-4 w-4" />
@@ -47,7 +47,7 @@ const SideMenu = async () => {
                         <Button
                             asChild
                             variant="ghost"
-                            className="w-full justify-start flex gap-2"
+                            className="w-full justify-start flex gap-2 bg-primary"
                         >
                             <Link href="/admin/comments">
                                 <FiMessageSquare className="h-4 w-4" />
@@ -57,7 +57,7 @@ const SideMenu = async () => {
                         <Button
                             asChild
                             variant="ghost"
-                            className="w-full justify-start flex gap-2"
+                            className="w-full justify-start flex gap-2 bg-primary"
                         >
                             <Link href="/admin/setting">
                                 <IoSettingsSharp className="h-4 w-4" />
