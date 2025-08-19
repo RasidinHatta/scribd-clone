@@ -7,6 +7,13 @@ import CommentsEmpty from "../empty-states/CommentsEmpty";
 import { buildCommentTree } from "@/lib/buildCommentTree";
 import { CommentType, User } from "@/types";
 import { Button } from "../ui/button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
 interface CommentSectionProps {
   documentId: string;
@@ -41,41 +48,45 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   }, []);
 
   return (
-    <div className="w-full mx-auto mt-10 bg-white dark:bg-zinc-900 rounded-xl shadow-md flex flex-col">
-      <div className="px-4 py-3 border-b text-center font-semibold text-lg">
-        Comments
-      </div>
-      <div className="max-h-[60vh] overflow-y-auto px-4 py-4 space-y-4">
-        {nestedComments.length === 0 ? (
-          <CommentsEmpty />
-        ) : (
-          <div className="space-y-4">
-            {nestedComments.map((comment) => (
-              <Comment
-                key={comment.id}
-                comment={comment}
-                documentId={documentId}
-                user={user}
-                isReply={false}
-                onStartReply={handleStartReply}
-                isReplying={replyState?.parentId === comment.id}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-      <div className="border-t px-4 py-3">
+    <Card className="w-full mx-auto mt-10 hover:shadow-lg transition-shadow">
+      <CardHeader className="text-center pb-3">
+        <CardTitle className="text-lg">Comments</CardTitle>
+      </CardHeader>
+      
+      <CardContent className="p-0">
+        <div className="max-h-[60vh] overflow-y-auto px-6 py-4 space-y-4">
+          {nestedComments.length === 0 ? (
+            <CommentsEmpty />
+          ) : (
+            <div className="space-y-4">
+              {nestedComments.map((comment) => (
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  documentId={documentId}
+                  user={user}
+                  isReply={false}
+                  onStartReply={handleStartReply}
+                  isReplying={replyState?.parentId === comment.id}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </CardContent>
+
+      <CardFooter className="border-t px-6 py-4 bg-muted/20">
         {replyState ? (
-          <div className="mb-4 p-3 bg-muted/30 rounded-lg">
-            <div className="flex justify-between items-center mb-2">
+          <div className="w-full mb-4 p-4 bg-muted/30 rounded-lg border">
+            <div className="flex justify-between items-center mb-3">
               <p className="text-sm text-muted-foreground">
-                Replying to {replyState.replyingTo}
+                Replying to <span className="font-medium">{replyState.replyingTo}</span>
               </p>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleCancelReply}
-                className="text-xs h-6 px-2"
+                className="text-xs h-7 px-2"
               >
                 Cancel
               </Button>
@@ -90,14 +101,16 @@ const CommentSection: React.FC<CommentSectionProps> = ({
             />
           </div>
         ) : (
-          <CommentForm
-            user={user || { name: "Anonymous", image: null }}
-            documentId={documentId}
-            onSuccess={handleSuccess}
-          />
+          <div className="w-full">
+            <CommentForm
+              user={user || { name: "Anonymous", image: null }}
+              documentId={documentId}
+              onSuccess={handleSuccess}
+            />
+          </div>
         )}
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 };
 
