@@ -1,11 +1,3 @@
-/**
- * Source: /components/admin/comments/columns.tsx
- *
- * This file defines the column configuration for the admin comments table.
- * It includes sorting, formatting, and custom cell rendering for comment data.
- * The CommentActionCell component provides row-level actions (view, edit, delete, replies, document/user details).
- */
-
 "use client"
 
 import { Button } from "@/components/ui/button"
@@ -25,11 +17,10 @@ export type CommentWithRelations = Comment & {
   _count?: {
     replies?: number
   }
-  // Explicit count property as alternative
   repliesCount?: number
 }
 
-// Skeleton components for loading states
+// Skeleton components
 const ContentSkeleton = ({ isReply = false }: { isReply?: boolean }) => (
   <div className={isReply ? "pl-6 border-l-2 border-muted-foreground/30" : ""}>
     <Skeleton className="h-4 w-full" />
@@ -56,6 +47,34 @@ const ActionsSkeleton = () => (
   </div>
 )
 
+// Reusable header component
+const SortableHeader = ({ column, label, size = "default" }: { column: any; label: string; size?: "default" | "sm" }) => (
+  <Button
+    className="bg-accent-background rounded-md text-foreground hover:bg-primary"
+    size={size}
+    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  >
+    {label}
+    <ArrowUpDown className="ml-2 h-3 w-3" />
+  </Button>
+)
+
+// Date formatting function
+const formatDateTime = (date: Date) => {
+  const day = date.getDate().toString().padStart(2, "0")
+  const month = (date.getMonth() + 1).toString().padStart(2, "0")
+  const year = date.getFullYear()
+
+  let hours = date.getHours()
+  const minutes = date.getMinutes().toString().padStart(2, "0")
+  const ampm = hours >= 12 ? "PM" : "AM"
+  hours = hours % 12
+  hours = hours ? hours : 12 // 0 should be 12
+  const formattedHours = hours.toString().padStart(2, "0")
+
+  return `${day}/${month}/${year}, ${formattedHours}:${minutes} ${ampm}`
+}
+
 export const commentColumns: ColumnDef<CommentWithRelations>[] = [
   {
     accessorKey: "content",
@@ -75,9 +94,7 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
         <div className={parentId ? "pl-6 border-l-2 border-muted-foreground/30" : ""}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <span className="line-clamp-2 text-sm">
-                {truncated}
-              </span>
+              <span className="line-clamp-2 text-sm">{truncated}</span>
             </TooltipTrigger>
             <TooltipContent side="top" align="start" className="max-w-[300px]">
               <p className="break-words">{content}</p>
@@ -90,7 +107,7 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
   },
   {
     accessorKey: "user",
-    header: "Author",
+    header: ({ column }) => <SortableHeader column={column} label="Author" size="sm" />,
     cell: ({ row }) => {
       const user = row.original.user
       if (!user?.name && !user?.email) return <AuthorSkeleton />
@@ -106,7 +123,7 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
   },
   {
     accessorKey: "document.title",
-    header: "Document",
+    header: ({ column }) => <SortableHeader column={column} label="Document" size="sm" />,
     cell: ({ row }) => {
       const title = row.original.document?.title
       if (title === undefined) return <DocumentSkeleton />
@@ -157,14 +174,9 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
       const replies = row.original
       if (replies === undefined) return <RepliesSkeleton />
       
-      // First check for direct replies array
-      const directRepliesCount = row.original.replies?.length || 0;
-
-      // Then check for _count.replies (Prisma count)
-      const prismaRepliesCount = row.original._count?.replies || 0;
-
-      // Use whichever is available
-      const replyCount = Math.max(directRepliesCount, prismaRepliesCount);
+      const directRepliesCount = row.original.replies?.length || 0
+      const prismaRepliesCount = row.original._count?.replies || 0
+      const replyCount = Math.max(directRepliesCount, prismaRepliesCount)
 
       return replyCount > 0 ? (
         <Badge variant="secondary" className="text-xs">
@@ -172,29 +184,20 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
         </Badge>
       ) : (
         <span className="text-muted-foreground text-sm">None</span>
-      );
+      )
     },
     size: 100,
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Created
-        <ArrowUpDown className="ml-2 h-3 w-3" />
-      </Button>
-    ),
+    header: ({ column }) => <SortableHeader column={column} label="Created" size="sm" />,
     cell: ({ row, getValue }) => {
       const value = getValue() as Date
       if (!value) return <DateSkeleton />
       
       return (
         <div className="text-xs text-muted-foreground">
-          {new Date(value).toLocaleString()}
+          {formatDateTime(new Date(value))}
         </div>
       )
     },
@@ -203,16 +206,7 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
   },
   {
     accessorKey: "updatedAt",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Updated
-        <ArrowUpDown className="ml-2 h-3 w-3" />
-      </Button>
-    ),
+    header: ({ column }) => <SortableHeader column={column} label="Updated" size="sm" />,
     cell: ({ row, getValue }) => {
       const updatedAt = getValue() as Date
       const createdAt = row.original.createdAt
@@ -221,11 +215,11 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
       
       const createdDate = new Date(createdAt)
       const updatedDate = new Date(updatedAt)
-      const wasEdited = updatedDate.getTime() > createdDate.getTime() + 1000 // 1 second buffer
+      const wasEdited = updatedDate.getTime() > createdDate.getTime() + 1000
 
       return wasEdited ? (
         <div className="text-xs text-muted-foreground">
-          {updatedDate.toLocaleString()}
+          {formatDateTime(updatedDate)}
         </div>
       ) : (
         <div className="text-xs text-muted-foreground/50">Not edited</div>
@@ -238,7 +232,6 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
     id: "actions",
     cell: ({ row }) => {
       const comment = row.original
-      // Show skeleton if comment data is incomplete
       if (!comment.id || !comment.content || !comment.user?.id || !comment.document?.title) {
         return <ActionsSkeleton />
       }

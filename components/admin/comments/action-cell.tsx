@@ -38,6 +38,7 @@ import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import { PrismAsync as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism"
+import ReactMarkdownFormat from "./reactMarkdownFormat"
 
 interface CommentActionCellProps {
   commentId: string
@@ -163,10 +164,20 @@ export function CommentActionCell({
   }
 
   return (
-    <>
+    // Use inline-flex so container doesn't expand to full width
+    <div className="inline-flex items-center hover:bg-primary rounded-md">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
+          {/*
+            Move the rounded + hover + transition classes to the trigger button
+            so the hover highlight is the button itself (square) instead of a wide rectangle.
+          */}
+          <Button
+            variant="ghost"
+            className="h-8 w-8 p-0 rounded-md hover:bg-primary transition-colors"
+            aria-label="Open menu"
+            disabled={isPending}
+          >
             <span className="sr-only">Open menu</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -227,7 +238,7 @@ export function CommentActionCell({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Comment Details Dialog */}
+      {/* Comment Replies Dialog */}
       <Dialog open={repliesOpen} onOpenChange={setRepliesOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -260,7 +271,6 @@ export function CommentActionCell({
         </DialogContent>
       </Dialog>
 
-
       {/* Comment Details Dialog */}
       <Dialog open={commentDetailsOpen} onOpenChange={setCommentDetailsOpen}>
         <DialogContent className="sm:max-w-[625px]">
@@ -274,110 +284,7 @@ export function CommentActionCell({
             {/* Comment Content */}
             <div className="grid grid-cols-4 items-start gap-4">
               <Label className="text-right mt-1">Content</Label>
-              <div className="col-span-3 text-sm prose max-w-none">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    code({ node, className, children, ...props }) {
-                      const match = /language-(\w+)/.exec(className || "")
-                      return match ? (
-                        <SyntaxHighlighter
-                          language={match[1]}
-                          // @ts-ignore
-                          style={oneDark}
-                          customStyle={{ backgroundColor: "transparent" }}
-                          PreTag="div"
-                          className="rounded-md text-sm my-2"
-                          {...props}
-                        >
-                          {String(children).replace(/\n$/, "")}
-                        </SyntaxHighlighter>
-                      ) : (
-                        <code className="bg-muted px-1 py-0.5 rounded text-sm">
-                          {children}
-                        </code>
-                      )
-                    },
-                    a({ node, href, children, ...props }) {
-                      return (
-                        <a
-                          href={href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline"
-                          {...props}
-                        >
-                          {children}
-                        </a>
-                      )
-                    },
-                    blockquote({ node, children, ...props }) {
-                      return (
-                        <blockquote className="border-l-4 border-muted-foreground pl-3 italic my-2">
-                          {children}
-                        </blockquote>
-                      )
-                    },
-                    ul({ node, children, ...props }) {
-                      return <ul className="list-disc pl-5 my-2">{children}</ul>
-                    },
-                    ol({ node, children, ...props }) {
-                      return <ol className="list-decimal pl-5 my-2">{children}</ol>
-                    },
-                    h1({ node, children, ...props }) {
-                      return <h1 className="text-xl font-bold my-2">{children}</h1>
-                    },
-                    h2({ node, children, ...props }) {
-                      return <h2 className="text-lg font-bold my-2">{children}</h2>
-                    },
-                    h3({ node, children, ...props }) {
-                      return <h3 className="text-base font-bold my-2">{children}</h3>
-                    },
-                    table({ node, children, ...props }) {
-                      return (
-                        <div className="overflow-x-auto my-2">
-                          <table
-                            className="w-full border-collapse border border-muted-foreground/20"
-                            {...props}
-                          >
-                            {children}
-                          </table>
-                        </div>
-                      )
-                    },
-                    thead({ node, children, ...props }) {
-                      return <thead className="bg-muted/50">{children}</thead>
-                    },
-                    tbody({ node, children, ...props }) {
-                      return <tbody>{children}</tbody>
-                    },
-                    tr({ node, children, ...props }) {
-                      return (
-                        <tr className="border-b border-muted-foreground/20">
-                          {children}
-                        </tr>
-                      )
-                    },
-                    th({ node, children, ...props }) {
-                      return (
-                        <th className="p-2 text-left font-semibold border-r border-muted-foreground/20 last:border-r-0">
-                          {children}
-                        </th>
-                      )
-                    },
-                    td({ node, children, ...props }) {
-                      return (
-                        <td className="p-2 border-r border-muted-foreground/20 last:border-r-0">
-                          {children}
-                        </td>
-                      )
-                    },
-                  }}
-                >
-                  {content}
-                </ReactMarkdown>
-              </div>
+              <ReactMarkdownFormat content={content} />
             </div>
 
             {/* Comment Type */}
@@ -580,6 +487,8 @@ export function CommentActionCell({
           </form>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   )
 }
+
+export default CommentActionCell

@@ -7,6 +7,8 @@
  * User data is fetched and updated via server actions.
  */
 
+"use client"
+
 import { deleteUserById, editUserById, getUserById } from "@/actions/admin/user"
 import { Button } from "@/components/ui/button"
 import {
@@ -121,10 +123,17 @@ function ActionCell({
   const availableRoles: RoleName[] = ["USER", "PUBLICUSER"];
 
   return (
-    <>
+    // make container inline so hover/background stays the shape of the button
+    <div className="inline-flex items-center hover:bg-primary rounded-md">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
+          {/* apply rounded + hover + transition to the trigger button (square) */}
+          <Button
+            variant="ghost"
+            className="h-8 w-8 p-0 rounded-md hover:bg-primary transition-colors"
+            aria-label="Open menu"
+            disabled={isPending}
+          >
             <span className="sr-only">Open menu</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -317,7 +326,7 @@ function ActionCell({
           </form>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   )
 }
 

@@ -43,8 +43,8 @@ const Navbar = async () => {
 
   const ThemeControls = () => (
     <div className="flex items-center gap-2">
-      <ModeToggle />
       <ThemeSelector />
+      <ModeToggle />
     </div>
   )
 
@@ -70,10 +70,10 @@ const Navbar = async () => {
               {/* Bottom Section */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  {session ? <UserMenu /> : <AuthButtons />}
                   <div className="ml-2 scale-90">
                     <ThemeControls />
                   </div>
+                  {session ? <UserMenu /> : <AuthButtons />}
                 </div>
               </div>
             </SheetContent>
@@ -84,8 +84,8 @@ const Navbar = async () => {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-4">
-          {session ? <UserMenu /> : <AuthButtons />}
           <ThemeControls />
+          {session ? <UserMenu /> : <AuthButtons />}
         </nav>
       </div>
     </header>
