@@ -136,7 +136,7 @@ export default function ActionCell({
 
   return (
     // container inline so hover background wraps trigger square only
-    <div className="inline-flex items-center">
+    <div className="inline-flex items-center hover:bg-primary rounded-md">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

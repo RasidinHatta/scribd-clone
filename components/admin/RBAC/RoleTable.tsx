@@ -1,6 +1,7 @@
-// RoleTable.tsx
-"use client";
+// RolesTable.tsx
+"use client"
 
+import { useState } from "react"
 import {
     Table,
     TableBody,
@@ -8,60 +9,80 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Role, User } from "@/lib/generated/prisma/client";
-import { RoleEditDialog } from "./RoleEditDialog";
-import { useState } from "react";
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Role, User } from "@/lib/generated/prisma/client"
+import { RoleEditDialog } from "./RoleEditDialog"
+import RoleUserDialog from "./RoleUserDialog"
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@/components/ui/tooltip";
-import RoleUserDialog from "./RoleUserDialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/tooltip"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { MoreHorizontal } from "lucide-react"
 
 /**
  * Extended Role type that includes user relationships
  */
 export type RoleRelation = Role & {
-    users: Pick<User, "id" | "name" | "email">[];
+    users: Pick<User, "id" | "name" | "email">[]
     _count?: {
-        users: number;
-    };
-};
+        users: number
+    }
+}
 
 /**
  * Props for RolesTable component
- * @param roles - Array of RoleRelation objects to display
  */
 export interface RolesTableProps {
-    roles: RoleRelation[];
+    roles: RoleRelation[]
 }
 
 /**
  * Table component for displaying and managing roles
- * Includes functionality for editing roles and viewing assigned users
  */
 export function RolesTable({ roles: initialRoles }: RolesTableProps) {
-    const [roles, setRoles] = useState(initialRoles);
+    const [roles, setRoles] = useState(initialRoles)
     const [editOpenRoleId, setEditOpenRoleId] = useState<string | null>(null)
     const [userDialogRoleId, setUserDialogRoleId] = useState<string | null>(null)
 
     /**
-     * Callback for when a role is updated
-     * @param updatedRole - The updated role object
+     * Handle role update
      */
     const handleRoleUpdated = (updatedRole: Role) => {
         setRoles((prevRoles) =>
             prevRoles.map((role) =>
                 role.id === updatedRole.id ? { ...role, ...updatedRole } : role
             )
-        );
-    };
+        )
+    }
+
+    const renderBadges = (perms: [boolean | undefined, string][]) => (
+        <div className="flex gap-1 flex-wrap">
+            {perms.some(([enabled]) => !!enabled) ? (
+                perms.map(
+                    ([enabled, label]) =>
+                        enabled && (
+                            <Badge key={label} className="bg-primary text-background">
+                                {label}
+                            </Badge>
+                        )
+                )
+            ) : (
+                <span className="text-muted-foreground">None</span>
+            )}
+        </div>
+    )
 
     return (
         <Table>
@@ -75,108 +96,91 @@ export function RolesTable({ roles: initialRoles }: RolesTableProps) {
                     <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
             </TableHeader>
+
             <TableBody>
                 {roles.map((role) => (
                     <TableRow key={role.id}>
-                        <TableCell className="font-medium">
-                            <div className="flex items-center gap-2">
-                                {role.name}
-                            </div>
-                        </TableCell>
+                        <TableCell className="font-medium">{role.name}</TableCell>
+
                         <TableCell className="max-w-[200px] truncate">
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <span>{role.description || "-"}</span>
+                                        <span>{role.description || "—"}</span>
                                     </TooltipTrigger>
-                                    {role.description && (
-                                        <TooltipContent>
-                                            <p>{role.description}</p>
-                                        </TooltipContent>
-                                    )}
+                                    <TooltipContent>
+                                        {role.description || "No description"}
+                                    </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
                         </TableCell>
-                        <TableCell>
-                            <div className="flex gap-1 flex-wrap">
-                                {role.createDocument && <Badge variant="outline">Create</Badge>}
-                                {role.readDocument && <Badge variant="outline">Read</Badge>}
-                                {role.updateDocument && <Badge variant="outline">Update</Badge>}
-                                {role.deleteDocument && <Badge variant="outline">Delete</Badge>}
-                                {!role.createDocument &&
-                                    !role.readDocument &&
-                                    !role.updateDocument &&
-                                    !role.deleteDocument && (
-                                        <span className="text-muted-foreground">None</span>
-                                    )}
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                            <div className="flex gap-1 flex-wrap">
-                                {role.createComment && <Badge variant="outline">Create</Badge>}
-                                {role.readComment && <Badge variant="outline">Read</Badge>}
-                                {role.updateComment && <Badge variant="outline">Update</Badge>}
-                                {role.deleteComment && <Badge variant="outline">Delete</Badge>}
-                                {!role.createComment &&
-                                    !role.readComment &&
-                                    !role.updateComment &&
-                                    !role.deleteComment && (
-                                        <span className="text-muted-foreground">None</span>
-                                    )}
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                            <Badge variant="outline">{role._count?.users || 0} users</Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                            {/* Actions dropdown menu */}
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="h-8 w-8 p-0">
-                                        <span className="sr-only">Open menu</span>
-                                        <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-40">
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem
-                                        className="cursor-pointer"
-                                        onSelect={() => setEditOpenRoleId(role.id)}
-                                    >
-                                        Edit
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                        className="cursor-pointer"
-                                        onSelect={() => setUserDialogRoleId(role.id)}
-                                    >
-                                        View Users
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
 
-                            {/* Edit Role Dialog */}
+                        <TableCell>
+                            {renderBadges([
+                                [role.createDocument, "Create"],
+                                [role.readDocument, "Read"],
+                                [role.updateDocument, "Update"],
+                                [role.deleteDocument, "Delete"],
+                            ])}
+                        </TableCell>
+
+                        <TableCell>
+                            {renderBadges([
+                                [role.createComment, "Create"],
+                                [role.readComment, "Read"],
+                                [role.updateComment, "Update"],
+                                [role.deleteComment, "Delete"],
+                            ])}
+                        </TableCell>
+
+                        <TableCell>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setUserDialogRoleId(role.id)}
+                            >
+                                {role._count?.users || 0} Users
+                            </Button>
+
+                            {/* Pass roleName to RoleUserDialog (matches your component's expected props) */}
+                            <RoleUserDialog
+                                open={userDialogRoleId === role.id}
+                                onOpenChange={(open) => setUserDialogRoleId(open ? role.id : null)}
+                                roleName={role.name as "USER" | "PUBLICUSER"}
+                            />
+                        </TableCell>
+
+                        <TableCell className="text-right">
+                            <div className="inline-flex items-center hover:bg-primary rounded-md">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" className="h-8 w-8 p-0">
+                                            <span className="sr-only">Open menu</span>
+                                            <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                        <DropdownMenuItem onClick={() => setEditOpenRoleId(role.id)}>
+                                            Edit
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+
                             <RoleEditDialog
                                 role={role}
                                 open={editOpenRoleId === role.id}
-                                onOpenChange={(open) => {
-                                    if (!open) setEditOpenRoleId(null)
-                                }}
+                                onOpenChange={(open) => setEditOpenRoleId(open ? role.id : null)}
                                 onRoleUpdated={handleRoleUpdated}
-                            />
-
-                            {/* View Users Dialog */}
-                            <RoleUserDialog
-                                open={userDialogRoleId === role.id}
-                                onOpenChange={(open) => {
-                                    if (!open) setUserDialogRoleId(null)
-                                }}
-                                roleName={role.name as "ADMIN" | "USER" | "PUBLICUSER"}
                             />
                         </TableCell>
                     </TableRow>
                 ))}
             </TableBody>
         </Table>
-    );
+    )
 }
