@@ -1,10 +1,7 @@
 import React from 'react'
-import data from './data.json'
-import { DataTable } from '@/components/data/data-table'
-import { SectionCards } from '@/components/data/section-cards'
-import { ChartAreaInteractive } from '@/components/data/chart-area-interactive'
 import { columns } from '@/components/admin/documents/columns'
 import { getAllDocumentWithUserAndComment } from '@/data/document'
+import { DataTable } from '@/components/admin/documents/data-table';
 
 const AdminPage = async() => {
   const documents = await getAllDocumentWithUserAndComment();
