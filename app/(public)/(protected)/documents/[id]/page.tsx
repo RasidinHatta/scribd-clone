@@ -1,12 +1,12 @@
 import DocumentCard from '@/components/documents/DocumentCard'
 import React from 'react'
-import { AnimatedContainer } from '@/components/animations/AnimatedContainer'
 import { getDocumentById } from '@/data/document'
 import DocumentNotFound from '@/components/not-found/DocumentNotFound'
 import { Metadata } from 'next'
 import { auth } from '@/auth'
 import { getCommentsByDocumentId } from '@/data/comment'
 import CommentSection from '@/components/comment/CommentSection'
+import { AnimatedContainer } from '@/components/landing/AnimatedContainer'
 
 export const metadata: Metadata = {
   title: "Document | SAMS",
