@@ -1,26 +1,32 @@
 /**
  * Source: /components/admin/user/columns.tsx
  *
- * Admin user table column definitions with sorting, formatting, and skeletons.
+ * Admin user table column definitions with sorting, formatting, tooltips, and skeletons.
  */
 
 "use client"
 
-import { User } from "@/lib/generated/prisma/client"
+import { RoleName, User } from "@/lib/generated/prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import ActionCell from "./action-cell"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import ActionCell from "./action-cell"
 
 // -----------------------------
 // Skeletons
 // -----------------------------
-const TextSkeleton = () => <Skeleton className="h-4 w-3/4" />
+const BasicSkeleton = () => <Skeleton className="h-4 w-3/4" />
 const RoleSkeleton = () => <Skeleton className="h-4 w-16" />
 const VerificationSkeleton = () => <Skeleton className="h-4 w-10" />
 const ImageSkeleton = () => <Skeleton className="w-8 h-8 rounded-full" />
-const DateSkeleton = () => <Skeleton className="h-4 w-24" />
+const DateSkeleton = () => (
+  <div className="space-y-1">
+    <Skeleton className="h-3 w-12" />
+    <Skeleton className="h-3 w-10" />
+  </div>
+)
 const ActionsSkeleton = () => (
   <div className="flex space-x-2">
     <Skeleton className="h-8 w-8 rounded-md" />
@@ -32,22 +38,13 @@ const ActionsSkeleton = () => (
 // -----------------------------
 // Reusable header
 // -----------------------------
-const SortableHeader = ({
-  column,
-  label,
-  size = "default",
-}: {
-  column: any
-  label: string
-  size?: "default" | "sm"
-}) => (
+const SortableHeader = ({ column, label }: { column: any; label: string }) => (
   <Button
     className="bg-accent-background rounded-md text-foreground hover:bg-primary"
-    size={size}
     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
   >
     {label}
-    <ArrowUpDown className="ml-2 h-3 w-3" />
+    <ArrowUpDown className="ml-2 h-4 w-4" />
   </Button>
 )
 
@@ -70,30 +67,42 @@ export const userColumns: ColumnDef<User>[] = [
     header: ({ column }) => <SortableHeader column={column} label="Name" />,
     cell: ({ getValue }) => {
       const value = getValue() as string | null
-      if (!value) return <TextSkeleton />
-      return <span className="text-sm">{value}</span>
+      if (!value) return <BasicSkeleton />
+      return <span className="text-sm font-medium">{value}</span>
     },
     enableSorting: true,
+    size: 180,
   },
   {
     accessorKey: "email",
     header: ({ column }) => <SortableHeader column={column} label="Email" />,
     cell: ({ getValue }) => {
       const value = getValue() as string | null
-      if (!value) return <TextSkeleton />
-      return <span className="text-sm">{value}</span>
+      if (!value) return <BasicSkeleton />
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="text-sm line-clamp-1">{value}</span>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{value}</p>
+          </TooltipContent>
+        </Tooltip>
+      )
     },
     enableSorting: true,
+    size: 220,
   },
   {
     accessorKey: "roleName",
     header: ({ column }) => <SortableHeader column={column} label="Role" />,
     cell: ({ getValue }) => {
-      const value = getValue() as string | null
+      const value = getValue() as RoleName
       if (!value) return <RoleSkeleton />
       return <span className="text-sm">{value}</span>
     },
     enableSorting: true,
+    size: 120,
   },
   {
     accessorKey: "emailVerified",
@@ -103,6 +112,7 @@ export const userColumns: ColumnDef<User>[] = [
       if (value === undefined) return <VerificationSkeleton />
       return <span className="text-sm">{value ? "Yes" : "No"}</span>
     },
+    size: 100,
   },
   {
     accessorKey: "image",
@@ -117,6 +127,7 @@ export const userColumns: ColumnDef<User>[] = [
         <span className="text-sm text-muted-foreground">No Image</span>
       )
     },
+    size: 100,
   },
   {
     accessorKey: "twoFactorEnabled",
@@ -126,43 +137,59 @@ export const userColumns: ColumnDef<User>[] = [
       if (value === undefined) return <VerificationSkeleton />
       return <span className="text-sm">{value ? "Enabled" : "Disabled"}</span>
     },
+    size: 120,
   },
   {
-    accessorKey: "createdAt",
-    header: ({ column }) => <SortableHeader column={column} label="Join Date" />,
+    id: "dates",
+    header: ({ column }) => <SortableHeader column={column} label="Dates" />,
     cell: ({ row }) => {
-      const value = row.original.createdAt
-      if (!value) return <DateSkeleton />
+      const { createdAt, updatedAt } = row.original
+      if (!createdAt || !updatedAt) return <DateSkeleton />
+
+      const createdDate = new Date(createdAt)
+      const updatedDate = new Date(updatedAt)
+
       return (
-        <span className="text-xs text-muted-foreground">
-          {formatDateDDMMYYYY(new Date(value))}
-        </span>
+        <div className="space-y-1 text-xs text-muted-foreground">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-1">
+                <span className="font-medium">C:</span>
+                <span>{formatDateDDMMYYYY(createdDate)}</span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Created: {createdDate.toLocaleString()}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-1">
+                <span className="font-medium">U:</span>
+                <span>{formatDateDDMMYYYY(updatedDate)}</span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Updated: {updatedDate.toLocaleString()}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
       )
     },
     enableSorting: true,
-    sortingFn: "datetime",
-    size: 160,
-  },
-  {
-    accessorKey: "updatedAt",
-    header: ({ column }) => <SortableHeader column={column} label="Updated At" />,
-    cell: ({ row }) => {
-      const value = row.original.updatedAt
-      if (!value) return <DateSkeleton />
-      return (
-        <span className="text-xs text-muted-foreground">
-          {formatDateDDMMYYYY(new Date(value))}
-        </span>
-      )
+    sortingFn: (rowA, rowB) => {
+      const dateA = new Date(rowA.original.updatedAt)
+      const dateB = new Date(rowB.original.updatedAt)
+      return dateA.getTime() - dateB.getTime()
     },
-    sortingFn: "datetime",
-    size: 160,
+    size: 180,
   },
   {
-    id: "action",
+    id: "actions",
     cell: ({ row }) => {
       const user = row.original
       if (!user.id || !user.email) return <ActionsSkeleton />
+
       return (
         <ActionCell
           userId={user.id}

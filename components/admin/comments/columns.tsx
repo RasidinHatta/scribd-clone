@@ -1,3 +1,9 @@
+/**
+ * Source: /components/admin/comment/columns.tsx
+ *
+ * Admin comment table column definitions with sorting, formatting, tooltips, and skeletons.
+ */
+
 "use client"
 
 import { Button } from "@/components/ui/button"
@@ -9,18 +15,23 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 
+// -----------------------------
+// Types
+// -----------------------------
 export type CommentWithRelations = Comment & {
-  user: Pick<User, 'id' | 'name' | 'email'>
-  document: Pick<Document, 'id' | 'title'>
-  parent?: Pick<Comment, 'id' | 'content'> | null
-  replies?: Array<Pick<Comment, 'id' | 'content' | 'createdAt' | 'userId'>>
+  user: Pick<User, "id" | "name" | "email">
+  document: Pick<Document, "id" | "title">
+  parent?: Pick<Comment, "id" | "content"> | null
+  replies?: Array<Pick<Comment, "id" | "content" | "createdAt" | "userId">>
   _count?: {
     replies?: number
   }
   repliesCount?: number
 }
 
-// Skeleton components
+// -----------------------------
+// Skeletons
+// -----------------------------
 const ContentSkeleton = ({ isReply = false }: { isReply?: boolean }) => (
   <div className={isReply ? "pl-6 border-l-2 border-muted-foreground/30" : ""}>
     <Skeleton className="h-4 w-full" />
@@ -47,8 +58,18 @@ const ActionsSkeleton = () => (
   </div>
 )
 
-// Reusable header component
-const SortableHeader = ({ column, label, size = "default" }: { column: any; label: string; size?: "default" | "sm" }) => (
+// -----------------------------
+// Reusable header
+// -----------------------------
+const SortableHeader = ({
+  column,
+  label,
+  size = "default",
+}: {
+  column: any
+  label: string
+  size?: "default" | "sm"
+}) => (
   <Button
     className="bg-accent-background rounded-md text-foreground hover:bg-primary"
     size={size}
@@ -59,7 +80,9 @@ const SortableHeader = ({ column, label, size = "default" }: { column: any; labe
   </Button>
 )
 
-// Date formatting function
+// -----------------------------
+// Formatters
+// -----------------------------
 const formatDateTime = (date: Date) => {
   const day = date.getDate().toString().padStart(2, "0")
   const month = (date.getMonth() + 1).toString().padStart(2, "0")
@@ -68,13 +91,22 @@ const formatDateTime = (date: Date) => {
   let hours = date.getHours()
   const minutes = date.getMinutes().toString().padStart(2, "0")
   const ampm = hours >= 12 ? "PM" : "AM"
-  hours = hours % 12
-  hours = hours ? hours : 12 // 0 should be 12
+  hours = hours % 12 || 12
   const formattedHours = hours.toString().padStart(2, "0")
 
   return `${day}/${month}/${year}, ${formattedHours}:${minutes} ${ampm}`
 }
 
+const formatDateDDMMYYYY = (date: Date) => {
+  const d = date.getDate().toString().padStart(2, "0")
+  const m = (date.getMonth() + 1).toString().padStart(2, "0")
+  const y = date.getFullYear()
+  return `${d}/${m}/${y}`
+}
+
+// -----------------------------
+// Columns
+// -----------------------------
 export const commentColumns: ColumnDef<CommentWithRelations>[] = [
   {
     accessorKey: "content",
@@ -82,13 +114,12 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
     cell: ({ row, getValue }) => {
       const content = getValue() as string
       const parentId = row.original.parentId
-      
+
       if (content === undefined) return <ContentSkeleton isReply={!!parentId} />
-      
+
       const maxLength = 50
-      const truncated = content.length > maxLength
-        ? `${content.substring(0, maxLength)}...`
-        : content
+      const truncated =
+        content.length > maxLength ? `${content.substring(0, maxLength)}...` : content
 
       return (
         <div className={parentId ? "pl-6 border-l-2 border-muted-foreground/30" : ""}>
@@ -111,7 +142,7 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
     cell: ({ row }) => {
       const user = row.original.user
       if (!user?.name && !user?.email) return <AuthorSkeleton />
-      
+
       return (
         <div className="space-y-1">
           <p className="font-medium text-sm">{user.name || "Anonymous"}</p>
@@ -122,12 +153,13 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
     size: 200,
   },
   {
+    id: "documentTitle",
     accessorKey: "document.title",
     header: ({ column }) => <SortableHeader column={column} label="Document" size="sm" />,
     cell: ({ row }) => {
       const title = row.original.document?.title
       if (title === undefined) return <DocumentSkeleton />
-      
+
       return (
         <Tooltip>
           <TooltipTrigger asChild>
@@ -149,14 +181,14 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
     cell: ({ row }) => {
       const parent = row.original.parent
       if (parent === undefined) return <ReplyToSkeleton />
-      
       if (!parent) return <span className="text-muted-foreground text-sm">—</span>
 
       return (
         <Tooltip>
           <TooltipTrigger asChild>
             <Badge variant="outline" className="text-xs font-normal max-w-[120px] truncate">
-              {parent.content.substring(0, 20)}{parent.content.length > 20 ? "..." : ""}
+              {parent.content.substring(0, 20)}
+              {parent.content.length > 20 ? "..." : ""}
             </Badge>
           </TooltipTrigger>
           <TooltipContent side="top" align="start" className="max-w-[300px]">
@@ -173,7 +205,7 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
     cell: ({ row }) => {
       const replies = row.original
       if (replies === undefined) return <RepliesSkeleton />
-      
+
       const directRepliesCount = row.original.replies?.length || 0
       const prismaRepliesCount = row.original._count?.replies || 0
       const replyCount = Math.max(directRepliesCount, prismaRepliesCount)
@@ -189,44 +221,56 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
     size: 100,
   },
   {
-    accessorKey: "createdAt",
-    header: ({ column }) => <SortableHeader column={column} label="Created" size="sm" />,
-    cell: ({ row, getValue }) => {
-      const value = getValue() as Date
-      if (!value) return <DateSkeleton />
-      
-      return (
-        <div className="text-xs text-muted-foreground">
-          {formatDateTime(new Date(value))}
-        </div>
-      )
-    },
-    sortingFn: 'datetime',
-    size: 160,
-  },
-  {
-    accessorKey: "updatedAt",
-    header: ({ column }) => <SortableHeader column={column} label="Updated" size="sm" />,
-    cell: ({ row, getValue }) => {
-      const updatedAt = getValue() as Date
-      const createdAt = row.original.createdAt
-      
-      if (!updatedAt || !createdAt) return <DateSkeleton />
-      
+    id: "dates",
+    header: ({ column }) => <SortableHeader column={column} label="Dates" />,
+    cell: ({ row }) => {
+      const { createdAt, updatedAt } = row.original
+      if (!createdAt || !updatedAt) return <DateSkeleton />
+
       const createdDate = new Date(createdAt)
       const updatedDate = new Date(updatedAt)
       const wasEdited = updatedDate.getTime() > createdDate.getTime() + 1000
 
-      return wasEdited ? (
-        <div className="text-xs text-muted-foreground">
-          {formatDateTime(updatedDate)}
+      return (
+        <div className="space-y-1 text-xs text-muted-foreground">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-1">
+                <span className="font-medium">C:</span>
+                <span>{formatDateDDMMYYYY(createdDate)}</span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Created: {formatDateTime(createdDate)}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-1">
+                <span className="font-medium">U:</span>
+                <span>
+                  {wasEdited ? formatDateDDMMYYYY(updatedDate) : "—"}
+                </span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              {wasEdited ? (
+                <p>Updated: {formatDateTime(updatedDate)}</p>
+              ) : (
+                <p>Not edited</p>
+              )}
+            </TooltipContent>
+          </Tooltip>
         </div>
-      ) : (
-        <div className="text-xs text-muted-foreground/50">Not edited</div>
       )
     },
-    sortingFn: 'datetime',
-    size: 160,
+    enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const dateA = new Date(rowA.original.updatedAt)
+      const dateB = new Date(rowB.original.updatedAt)
+      return dateA.getTime() - dateB.getTime()
+    },
+    size: 140, // compact combined column
   },
   {
     id: "actions",
@@ -235,7 +279,7 @@ export const commentColumns: ColumnDef<CommentWithRelations>[] = [
       if (!comment.id || !comment.content || !comment.user?.id || !comment.document?.title) {
         return <ActionsSkeleton />
       }
-      
+
       return (
         <CommentActionCell
           commentId={comment.id}

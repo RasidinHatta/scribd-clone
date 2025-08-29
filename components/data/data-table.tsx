@@ -97,25 +97,15 @@ export function DataTable<TData, TValue>({
    * You can customize this based on your data structure
    */
   const globalFilterFn: FilterFn<TData> = (row, _columnId, filterValue) => {
+    // Try to search common fields - adjust based on your data structure
+    const searchableFields = ['title', 'description', 'subject']
     const search = String(filterValue).toLowerCase()
 
-    // Grab row data (the actual object from your table)
-    const original = row.original as any
-
-    // Define searchable fields
-    const searchableFields = [
-      original.content,
-      original.user?.name,
-      original.user?.email,
-      original.document?.title,
-    ]
-
-    // Compare
-    return searchableFields.some(val =>
-      String(val ?? "").toLowerCase().includes(search)
-    )
+    return searchableFields.some(field => {
+      const value = String(row.getValue(field as any) ?? "").toLowerCase()
+      return value.includes(search)
+    })
   }
-
 
   const table = useReactTable({
     data,
