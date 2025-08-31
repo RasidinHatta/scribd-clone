@@ -1,5 +1,7 @@
 import { IconDashboard, IconFile, IconHelp, IconMessage, IconSettings, IconUsers } from "@tabler/icons-react";
 
+const route = "admin2"
+
 export const navData = {
   user: {
     name: "shadcn",
@@ -9,29 +11,29 @@ export const navData = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/admin2",
+      url: `/${route}`,
       icon: IconDashboard,
     },
     {
       title: "Document",
-      url: "/admin2/documents",
+      url: `/${route}/documents`,
       icon: IconFile,
     },
     {
       title: "Comment",
-      url: "/admin2/comments",
+      url: `/${route}/comments`,
       icon: IconMessage,
     },
     {
       title: "User",
-      url: "/admin2/users",
+      url: `/${route}/users`,
       icon: IconUsers,
     }
   ],
   navSecondary: [
     {
       title: "Settings",
-      url: "/admin2/settings",
+      url: "/admin2/setting",
       icon: IconSettings,
     },
     {
