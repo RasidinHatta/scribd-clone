@@ -1,29 +1,20 @@
-/**
- * Source: /app/(admin)/admin/users/page.tsx
- *
- * This page displays the admin user list.
- * It fetches all users except admins, then renders them in a DataTable with column configuration.
- * Metadata is set for SEO and page info.
- */
-
-import { userColumns } from '@/components/admin/user/columns'
-import { DataTable } from '@/components/admin/user/data-table'
-import { getAllUserWithRole } from '@/data/user'
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: "Users | SAMS",
-  description: "A document sharing platform with community discussions",
-}
+import { userColumns } from '@/components/admin/user/columns';
+import { DataTable } from '@/components/admin/user/data-table';
+import { getAllUserWithRole } from '@/data/user';
+import React from 'react'
 
 const UserPage = async () => {
-  // Fetch all users except admins for display
-  const userList = (await getAllUserWithRole()) ?? []
-
+  const userList = await getAllUserWithRole();
   return (
     <div className="p-4">
-      <h1 className="text-xl font-semibold mb-4">User List</h1>
-      <DataTable columns={userColumns} data={userList}/>
+      {/* Page heading */}
+      <h1 className="text-xl font-semibold mb-4">Communities</h1>
+
+      {/* DataTable component that displays the documents */}
+      <DataTable
+        columns={userColumns}  // Column configuration from columns.tsx
+        data={userList}   // Document data fetched from the database
+      />
     </div>
   )
 }

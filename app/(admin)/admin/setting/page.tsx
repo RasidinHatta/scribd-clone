@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const SettingPage = () => {
   return (
     <div className="p-4 space-y-6">
-      <h1 className="text-2xl font-bold mb-4">Admin Settings</h1>
+      <h1 className="text-xl font-semibold mb-4">Admin Settings</h1>
 
 
       <Card>

@@ -18,8 +18,8 @@ export default auth(async (req) => {
   const { nextUrl } = req;
   const path = nextUrl.pathname;
 
-  const matchesAny = (routes: string[], p: string) =>
-    routes.some(route => p === route || p.startsWith(route + "/"));
+  const matchesAny = (routes: string[], p: string): boolean =>
+    routes.some((route: string) => p === route || p.startsWith(route + "/"));
 
   const isPublicRoute = matchesAny(publicRoute, path);
   const isAuthRoute = matchesAny(authRoute, path);

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useSession, signOut } from "next-auth/react"
 import {
   IconDotsVertical,
   IconLogout,
@@ -36,17 +36,16 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+import { useState } from "react"
+
+export function NavUser() {
+  const { data: session } = useSession()
   const { isMobile } = useSidebar()
-  const [profileOpen, setProfileOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  if (!session?.user) return null
+
+  const { name, email, image } = session.user
 
   return (
     <>
@@ -59,19 +58,20 @@ export function NavUser({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarImage src={image ?? ""} alt={name ?? "User"} />
+                  <AvatarFallback className="rounded-lg">
+                    {name?.charAt(0) ?? "U"}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">{name}</span>
                   <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
+                    {email}
                   </span>
                 </div>
                 <IconDotsVertical className="ml-auto size-4" />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
-
             <DropdownMenuContent
               className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
               side={isMobile ? "bottom" : "right"}
@@ -81,59 +81,56 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                    <AvatarImage src={image ?? ""} alt={name ?? "User"} />
+                    <AvatarFallback className="rounded-lg">
+                      {name?.charAt(0) ?? "U"}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
+                    <span className="truncate font-medium">{name}</span>
                     <span className="text-muted-foreground truncate text-xs">
-                      {user.email}
+                      {email}
                     </span>
                   </div>
                 </div>
               </DropdownMenuLabel>
-
               <DropdownMenuSeparator />
-
               <DropdownMenuGroup>
-                <DropdownMenuItem onSelect={() => setProfileOpen(true)}>
+                <DropdownMenuItem onClick={() => setOpen(true)}>
                   <IconUserCircle />
                   <span>Profile</span>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-
               <DropdownMenuSeparator />
-
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => signOut()}>
                 <IconLogout />
-                <span>Log out</span>
+                Log out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>
       </SidebarMenu>
 
-      {/* Profile Dialog (independent of dropdown) */}
-      <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
+      {/* Profile Dialog */}
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Profile</DialogTitle>
+            <DialogTitle>Admin Profile</DialogTitle>
             <DialogDescription>
-              Manage your profile information.
+              Your account details
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <Avatar className="h-12 w-12 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-medium">{user.name}</p>
-                <p className="text-muted-foreground text-sm">{user.email}</p>
-              </div>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-12 w-12 rounded-lg">
+              <AvatarImage src={image ?? ""} alt={name ?? "User"} />
+              <AvatarFallback className="rounded-lg">
+                {name?.charAt(0) ?? "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <span className="font-medium">{name}</span>
+              <span className="text-muted-foreground text-sm">{email}</span>
             </div>
-            {/* Add editable form fields if needed */}
           </div>
         </DialogContent>
       </Dialog>

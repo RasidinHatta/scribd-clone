@@ -1,13 +1,15 @@
-import { IconDashboard, IconFile, IconHelp, IconMessage, IconSettings, IconUsers } from "@tabler/icons-react";
+import {
+  IconDashboard,
+  IconFile,
+  IconHelp,
+  IconMessage,
+  IconSettings,
+  IconUsers,
+} from "@tabler/icons-react";
 
-const route = "admin2"
+const route = "admin";
 
 export const navData = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpeg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -15,40 +17,40 @@ export const navData = {
       icon: IconDashboard,
     },
     {
-      title: "Document",
+      title: "Documents",
       url: `/${route}/documents`,
       icon: IconFile,
     },
     {
-      title: "Comment",
+      title: "Comments",
       url: `/${route}/comments`,
       icon: IconMessage,
     },
     {
-      title: "User",
+      title: "Users",
       url: `/${route}/users`,
       icon: IconUsers,
-    }
+    },
   ],
   navSecondary: [
     {
       title: "Settings",
-      url: "/admin2/setting",
+      url: `/${route}/setting`,
       icon: IconSettings,
     },
     {
-      title: "Get Help",
-      url: "/admin2/help",
+      title: "Help",
+      url: `/${route}/help`,
       icon: IconHelp,
     },
-  ]
-}
+  ],
+};
 
 export const routeTitles: Record<string, string> = {
-  "/admin2": "Dashboard Overview",
-  "/admin2/documents": "Document Management",
-  "/admin2/comments": "Comment Management",
-  "/admin2/users": "User Management",
-  "/admin2/settings": "Configuration",
-  "/admin2/help": "Help & Support",
+  [`/${route}`]: "Dashboard Overview",
+  [`/${route}/documents`]: "Document Management",
+  [`/${route}/comments`]: "Comment Management",
+  [`/${route}/users`]: "User Management",
+  [`/${route}/setting`]: "Configuration",
+  [`/${route}/help`]: "Help & Support",
 };
