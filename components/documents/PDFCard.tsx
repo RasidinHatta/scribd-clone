@@ -98,7 +98,7 @@ const PDFCard = ({
           <Badge>{subject}</Badge>
 
           {showActions && (
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-4 hover:bg-primary rounded-md">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
