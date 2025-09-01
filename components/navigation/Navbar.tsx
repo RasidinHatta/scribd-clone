@@ -15,6 +15,7 @@ import { SignOutButton } from '../auth/SignOutButton'
 import { auth } from '@/auth'
 import UserAvatar from '../user/UserAvatar'
 import SearchBar from './SearchBar'
+import HomeLogo from '../resources/logos/HomeLogo'
 
 /**
  * Navbar Component
@@ -64,7 +65,7 @@ const Navbar = async () => {
                                     href="/"
                                     className="font-bold text-lg transition-transform transform hover:scale-105 hover:text-primary"
                                 >
-                                    <SheetTitle>[S][A]</SheetTitle>
+                                    <SheetTitle><HomeLogo/></SheetTitle>
                                 </Link>
                                 {/* Navigation links */}
                                 <Link
@@ -143,7 +144,7 @@ const Navbar = async () => {
                             href="/"
                             className="font-bold text-lg transition-transform transform hover:scale-105 hover:text-primary"
                         >
-                            [S][A]
+                            <HomeLogo/>
                         </Link>
                         <Link
                             href="/community"
