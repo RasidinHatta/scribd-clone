@@ -1,5 +1,6 @@
 import Footer from '@/components/navigation/Footer';
 import Navbar from '@/components/navigation/Navbar';
+import NavbarSkeleton from '@/components/skeletons/NavbarSkeleton ';
 import React, { Suspense } from 'react';
 
 const PublicLayout = async ({
@@ -10,7 +11,7 @@ const PublicLayout = async ({
     return (
         <div className="flex flex-col min-h-screen">
             <div className="sticky top-0 z-50 bg-background shadow-md">
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<NavbarSkeleton />}>
                     <Navbar />
                 </Suspense>
             </div>
