@@ -6,12 +6,12 @@ import { BsGoogle } from "react-icons/bs"
 import { googleAuthenticate } from "@/actions/login"
 
 const GoogleButton = () => {
-  const [ errorMsgGoogle, dispatchGoogle] = useActionState(googleAuthenticate, undefined)
+  const [errorMsgGoogle, dispatchGoogle] = useActionState(googleAuthenticate, undefined)
   return (
     <form className="flex mt-4" action={dispatchGoogle}>
       <Button variant={"outline"} className="flex flex-row items-center gap-3 w-full">
         <BsGoogle />
-        Google Sign In
+        Sign In With Google
       </Button>
       <p>{errorMsgGoogle}</p>
     </form>

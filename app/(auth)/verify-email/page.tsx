@@ -1,10 +1,8 @@
-import VerifyEmailForm from '@/components/auth/forms/VerifyEmailForm'
+import VerifyEmailForm from '@/components/auth/form/VerifyEmailForm'
 import React from 'react'
 
 const VerifyEmailPage = () => {
-    return (
-        <VerifyEmailForm />
-    )
+    return <VerifyEmailForm />
 }
 
 export default VerifyEmailPage

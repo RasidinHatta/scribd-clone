@@ -6,8 +6,10 @@ import { useCallback, useEffect, useState } from "react";
 import CardWrapper from "../CardWrapper";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
+import AuthCardWrapper from "../AuthCardWrapper";
+import { cn } from "@/lib/utils";
 
-const VerifyEmailForm = () => {
+const VerifyEmailForm = ({ className, ...props }: React.ComponentProps<"div">) => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [success, setSuccess] = useState<string | undefined>(undefined);
     const searchParams = useSearchParams();
@@ -40,19 +42,15 @@ const VerifyEmailForm = () => {
         onSubmit()
     }, [])
     return (
-        <CardWrapper
-            headerLabel="Confirming your email address"
-            title="Confirming now..."
-            backButtonHref="/login"
-            backButtonLabel="Continue to login"
-            className="max-w-full"
-        >
-            <div className="flex items-center w-full justify-center">
-                {!success && !error && <p>Loading</p>}
-                <FormSuccess message={success} />
-                {!success && <FormError message={error} />}
+        <AuthCardWrapper headerLabel="Confirming now..." description="Confirming your email address" label="Sign In" href="/login" question="Continue to login? " >
+            <div className={cn("flex flex-col justify-center p-6", className)} {...props}>
+                <div className="flex items-center w-full justify-center">
+                    {!success && !error && <p>Loading</p>}
+                    <FormSuccess message={success} />
+                    {!success && <FormError message={error} />}
+                </div>
             </div>
-        </CardWrapper>
+        </AuthCardWrapper>
     )
 }
 

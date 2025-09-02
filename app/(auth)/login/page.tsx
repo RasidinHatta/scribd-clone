@@ -1,13 +1,8 @@
-import LoginForm from '@/components/auth/forms/LoginForm'
+import { LoginForm } from '@/components/auth/form/LoginForm'
 import React from 'react'
 
-/**
- * Login page - renders the LoginForm component
- */
-const loginPage = () => {
-  return (
-    <LoginForm />
-  )
+const LoginPage = () => {
+    return <LoginForm />
 }
 
-export default loginPage
+export default LoginPage
