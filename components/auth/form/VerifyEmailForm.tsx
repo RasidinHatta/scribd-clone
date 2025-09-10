@@ -1,13 +1,12 @@
 "use client"
 
-import { newVerification } from "@/actions/new-verification";
-import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import CardWrapper from "../CardWrapper";
-import { FormSuccess } from "../FormSuccess";
-import { FormError } from "../FormError";
-import AuthCardWrapper from "../AuthCardWrapper";
-import { cn } from "@/lib/utils";
+import { newVerification } from "@/actions/new-verification"
+import { useSearchParams } from "next/navigation"
+import { useCallback, useEffect, useState } from "react"
+import { FormSuccess } from "../FormSuccess"
+import { FormError } from "../FormError"
+import AuthCardWrapper from "../AuthCardWrapper"
+import { cn } from "@/lib/utils"
 
 const VerifyEmailForm = ({ className, ...props }: React.ComponentProps<"div">) => {
     const [error, setError] = useState<string | undefined>(undefined);

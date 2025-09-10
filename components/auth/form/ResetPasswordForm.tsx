@@ -1,21 +1,20 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useState, useCallback, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { FormError } from "../FormError";
-import { FormSuccess } from "../FormSuccess";
-import CardWrapper from "../CardWrapper";
-import { NewPasswordSchema } from "@/lib/schemas";
-import { resetPassword } from "@/actions/password";
-import AuthCardWrapper from "../AuthCardWrapper";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { FormError } from "../FormError"
+import { FormSuccess } from "../FormSuccess"
+import { NewPasswordSchema } from "@/lib/schemas"
+import { resetPassword } from "@/actions/password"
+import AuthCardWrapper from "../AuthCardWrapper"
+import { cn } from "@/lib/utils"
 
 const ResetPasswordForm = ({ className, ...props }: React.ComponentProps<"div">) => {
     const [loading, setLoading] = useState(false);

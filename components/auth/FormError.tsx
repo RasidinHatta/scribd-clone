@@ -1,4 +1,4 @@
-import { BsExclamationCircleFill } from "react-icons/bs";
+import { BsExclamationCircleFill } from "react-icons/bs"
 
 
 interface FormErrorProps {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState } from "react"
+import { useForm } from "react-hook-form"
 import {
   Form,
   FormControl,
@@ -9,18 +9,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { register } from "@/actions/register";
-import { RegisterSchema } from "@/lib/schemas";
-import GoogleButton from "../GoogleButton";
-import { toast } from "sonner";
-import AuthCardWrapper from "../AuthCardWrapper";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+} from "@/components/ui/form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Input } from "@/components/ui/input"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
+import { register } from "@/actions/register"
+import { RegisterSchema } from "@/lib/schemas"
+import GoogleButton from "../GoogleButton"
+import { toast } from "sonner"
+import AuthCardWrapper from "../AuthCardWrapper"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 /**
  * Calculates password strength based on complexity criteria

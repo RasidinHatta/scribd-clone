@@ -1,4 +1,4 @@
-import { CheckCheckIcon } from "lucide-react";
+import { CheckCheckIcon } from "lucide-react"
 
 interface FormSuccessProps {
   message?: string;
