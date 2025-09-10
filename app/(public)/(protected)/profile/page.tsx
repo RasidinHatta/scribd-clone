@@ -30,6 +30,7 @@ import {
 import { updateUserInfo } from "@/actions/user"
 import { ProfileSchema } from "@/lib/schemas"
 import ChangeImageForm from "@/components/user/ChangeImageForm"
+import { Switch } from "@/components/ui/switch"
 
 const ProfilePage = () => {
   const { data: session, status } = useSession()
@@ -112,9 +113,13 @@ const ProfilePage = () => {
                 className="rounded-full object-cover w-[150px] h-[150px] border"
               />
             ) : (
-              <div className="w-[150px] h-[150px] rounded-full bg-muted flex items-center justify-center text-muted-foreground">
-                No Image
-              </div>
+              <Image
+                src="/avatars/shadcn.jpeg"
+                alt="Profile Picture"
+                width={150}
+                height={150}
+                className="rounded-full object-cover w-[150px] h-[150px] border"
+              />
             )}
           </CardContent>
           <CardContent className="flex justify-center">
@@ -163,14 +168,17 @@ const ProfilePage = () => {
                   control={form.control}
                   name="twoFactorEnabled"
                   render={({ field }) => (
-                    <FormItem className="flex items-center space-x-2">
+                    <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel>Enable Two-Factor</FormLabel>
+                        <FormMessage />
+                      </div>
                       <FormControl>
-                        <Checkbox
+                        <Switch
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <FormLabel className="m-0">Enable Two-Factor</FormLabel>
                     </FormItem>
                   )}
                 />
@@ -219,7 +227,11 @@ const ProfilePage = () => {
 
 
                 <div className="flex justify-end pt-4">
-                  <Button type="submit" disabled={loading}>
+                  <Button
+                    type="submit"
+                    className="text-[#171717]"
+                    disabled={loading}
+                  >
                     {loading ? "Saving..." : "Save Changes"}
                   </Button>
                 </div>

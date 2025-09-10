@@ -34,7 +34,7 @@ const ChangeUserImage = ({ onUpload, disabled }: ChangeUserImageProps) => {
                 }}
                 uploadPreset="sams-image"
             >
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center text-[#171717]">
                     <FiUpload className="w-4 h-4" />
                     {disabled ? "Uploading..." : "Change Profile Picture"}
                 </div>
