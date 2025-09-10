@@ -6,7 +6,7 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
-    "vercel-build": "prisma db push && next build",
+    "vercel-build": "prisma db push --skip-generate && next build",
     "build": "next build"
   },
   "dependencies": {
