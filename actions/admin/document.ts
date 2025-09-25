@@ -3,6 +3,7 @@
 import db from "@/prisma/prisma"
 import { revalidatePath } from "next/cache"
 import cloudinary from 'cloudinary'
+import { startOfMonth, subMonths } from "date-fns"
 
 // Cloudinary configuration
 const cloudinaryAppName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
@@ -201,5 +202,72 @@ export const deleteDocumentFromCloudinary = async (publicId: string) => {
   } catch (error) {
     console.error("Failed to delete Document from Cloudinary:", error);
     throw new Error("Cloudinary document deletion failed.");
+  }
+}
+
+/**
+ * Fetches document statistics (month vs all-time).
+ * @param mode "month" | "all"
+ */
+export const fetchDocumentStats = async (mode: "month" | "all") => {
+  const now = new Date()
+  const startThisMonth = startOfMonth(now)
+  const startLastMonth = startOfMonth(subMonths(now, 1))
+
+  if (mode === "month") {
+    // Docs created this month
+    const thisMonthDocuments = await db.document.count({
+      where: { createdAt: { gte: startThisMonth } },
+    })
+
+    // Docs created last month
+    const lastMonthDocuments = await db.document.count({
+      where: { createdAt: { gte: startLastMonth, lt: startThisMonth } },
+    })
+
+    const percentageChange =
+      lastMonthDocuments === 0
+        ? thisMonthDocuments > 0
+          ? 100
+          : 0
+        : ((thisMonthDocuments - lastMonthDocuments) / lastMonthDocuments) * 100
+
+    return {
+      totalDocuments: thisMonthDocuments,
+      lastMonthDocuments,
+      percentageChange: Math.round(percentageChange),
+    }
+  }
+
+  // All time stats
+  const totalDocuments = await db.document.count()
+  return {
+    totalDocuments,
+    percentageChange: 0, // all-time doesn't compare
+  }
+}
+
+
+export async function fetchMostCommentedDocument() {
+  const mostCommented = await db.document.findFirst({
+    orderBy: {
+      Comment: {
+        _count: "desc",
+      },
+    },
+    include: {
+      _count: {
+        select: { Comment: true },
+      },
+    },
+  })
+
+  if (!mostCommented) {
+    return { title: "No documents yet", commentCount: 0 }
+  }
+
+  return {
+    title: mostCommented.title,
+    commentCount: mostCommented._count.Comment,
   }
 }

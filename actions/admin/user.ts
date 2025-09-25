@@ -2,6 +2,7 @@
 
 import db from "@/prisma/prisma"
 import { revalidatePath } from "next/cache"
+import { startOfMonth, subMonths } from "date-fns"
 
 /**
  * Deletes a user by their unique ID.
@@ -117,5 +118,44 @@ export async function getUsersByRoleName(roleName: "ADMIN" | "USER" | "PUBLICUSE
   } catch (error) {
     console.error(error)
     return { success: false, error: "Failed to fetch users" }
+  }
+}
+
+
+
+
+export async function fetchUserStats(mode: "month" | "all") {
+  const now = new Date()
+  const startThisMonth = startOfMonth(now)
+  const startLastMonth = startOfMonth(subMonths(now, 1))
+
+  const thisMonthUsers = await db.user.count({
+    where: { roleName: { not: "ADMIN" }, createdAt: { gte: startThisMonth } },
+  })
+
+  const lastMonthUsers = await db.user.count({
+    where: { roleName: { not: "ADMIN" }, createdAt: { gte: startLastMonth, lt: startThisMonth } },
+  })
+
+  const totalUsers = await db.user.count({
+    where: { roleName: { not: "ADMIN" } },
+  })
+
+  const percentageChange =
+    mode === "month"
+      ? lastMonthUsers === 0
+        ? thisMonthUsers > 0
+          ? 100
+          : 0
+        : ((thisMonthUsers - lastMonthUsers) / lastMonthUsers) * 100
+      : totalUsers === 0
+        ? 0
+        : (thisMonthUsers / totalUsers) * 100
+
+  return {
+    totalUsers,
+    thisMonthUsers,
+    lastMonthUsers,
+    percentageChange: Math.round(percentageChange),
   }
 }

@@ -3,6 +3,7 @@
 import { auth } from "@/auth"
 import db from "@/prisma/prisma"
 import { revalidatePath } from "next/cache"
+import { startOfMonth, subMonths } from "date-fns"
 
 /**
  * Fetches a comment by ID with associated user and document info
@@ -252,5 +253,47 @@ export const editCommentById = async (
       success: false,
       error: error instanceof Error ? error.message : "Failed to update comment",
     }
+  }
+}
+
+/**
+ * Fetches comment statistics (month vs all-time).
+ * @param mode "month" | "all"
+ */
+export const fetchCommentStats = async (mode: "month" | "all") => {
+  const now = new Date()
+  const startThisMonth = startOfMonth(now)
+  const startLastMonth = startOfMonth(subMonths(now, 1))
+
+  if (mode === "month") {
+    // Comments this month
+    const thisMonthComments = await db.comment.count({
+      where: { createdAt: { gte: startThisMonth } },
+    })
+
+    // Comments last month
+    const lastMonthComments = await db.comment.count({
+      where: { createdAt: { gte: startLastMonth, lt: startThisMonth } },
+    })
+
+    const percentageChange =
+      lastMonthComments === 0
+        ? thisMonthComments > 0
+          ? 100
+          : 0
+        : ((thisMonthComments - lastMonthComments) / lastMonthComments) * 100
+
+    return {
+      totalComments: thisMonthComments,
+      lastMonthComments,
+      percentageChange: Math.round(percentageChange),
+    }
+  }
+
+  // All time stats
+  const totalComments = await db.comment.count()
+  return {
+    totalComments,
+    percentageChange: 0,
   }
 }

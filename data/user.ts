@@ -1,4 +1,5 @@
 import db from "@/prisma/prisma"
+import { startOfMonth, subMonths } from "date-fns"
 
 //source : /data/user.ts
 
@@ -6,15 +7,7 @@ import db from "@/prisma/prisma"
  * Fetches all users from the database.
  * @returns Array of user objects or null if an error occurs.
  */
-export const getAllUser = async () => {
-    try {
-        const user = await db.user.findMany()
-        return user
-    } catch (error) {
-        console.log(error)
-        return null
-    }
-}
+// /data/user.ts
 
 /**
  * Fetches all users except those with the "ADMIN" role.
@@ -22,16 +15,16 @@ export const getAllUser = async () => {
  * @returns Array of user objects or null if an error occurs.
  */
 export const getAllUserWithRole = async () => {
-  return await db.user.findMany({
-    where: {
-      NOT: {
-        roleName: "ADMIN",
-      },
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
+    return await db.user.findMany({
+        where: {
+            NOT: {
+                roleName: "ADMIN",
+            },
+        },
+        orderBy: {
+            name: "asc",
+        },
+    });
 };
 
 /**
