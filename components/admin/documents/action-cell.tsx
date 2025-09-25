@@ -21,8 +21,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { MoreHorizontal } from "lucide-react"
+import { MoreHorizontal, Loader2 } from "lucide-react" // Import Loader2 for spinner
 import { useState, useTransition } from "react"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 export type DocumentDetails = {
@@ -64,6 +65,7 @@ interface DocumentActionCellProps {
 }
 
 function DocumentActionCell({ documentId, documentTitle }: DocumentActionCellProps) {
+  const router = useRouter()
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [viewOpen, setViewOpen] = useState(false)
@@ -71,7 +73,7 @@ function DocumentActionCell({ documentId, documentTitle }: DocumentActionCellPro
   const [documentDetails, setDocumentDetails] = useState<DocumentDetails | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [isPending, startTransition] = useTransition()
-
+  const [isNavigating, setIsNavigating] = useState(false) // State for navigation loading
   const [title, setTitle] = useState(documentTitle)
   const [description, setDescription] = useState("")
 
@@ -131,6 +133,14 @@ function DocumentActionCell({ documentId, documentTitle }: DocumentActionCellPro
       } else {
         toast.error(res.error || "Failed to update document")
       }
+    })
+  }
+
+  const handleManageComments = () => {
+    setIsNavigating(true) // Start loading animation
+    startTransition(() => {
+      router.push(`/admin/comments?documentId=${documentId}`)
+      // Note: setIsNavigating(false) is not needed here as navigation will unmount the component
     })
   }
 
@@ -238,6 +248,20 @@ function DocumentActionCell({ documentId, documentTitle }: DocumentActionCellPro
             </div>
           )}
           <DialogFooter>
+            <Button
+              onClick={handleManageComments}
+              disabled={isPending || isNavigating}
+              className="text-secondary"
+            >
+              {isNavigating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                "Manage Document Comments"
+              )}
+            </Button>
             <DialogClose asChild>
               <Button variant="outline">Close</Button>
             </DialogClose>

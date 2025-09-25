@@ -16,7 +16,7 @@ import {
   getFacetedUniqueValues,
   getFacetedRowModel,
 } from "@tanstack/react-table"
-
+import { useRouter, useSearchParams } from "next/navigation" // Import Next.js hooks
 import {
   Table,
   TableBody,
@@ -63,16 +63,26 @@ export function DataTable<TData, TValue>({
   data: initialData,
   documents,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [data, setData] = React.useState(() => initialData)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [globalFilter, setGlobalFilter] = React.useState("")
-  // Initialize with the first document's ID, or null if no documents
-  const [selectedDocumentId, setSelectedDocumentId] = React.useState<string | null>(
-    documents.length > 0 ? documents[0].id : null
-  )
+
+  // Initialize selectedDocumentId with query param or first document
+  const [selectedDocumentId, setSelectedDocumentId] = React.useState<string | null>(() => {
+    const documentId = searchParams.get("documentId")
+    // Ensure the documentId exists in the documents list
+    return documentId && documents.some(doc => doc.id === documentId)
+      ? documentId
+      : documents.length > 0
+        ? documents[0].id
+        : null
+  })
+
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
@@ -88,6 +98,15 @@ export function DataTable<TData, TValue>({
     () => data?.map((item: any) => item.id) || [],
     [data]
   )
+
+  // Update URL with documentId query param when selectedDocumentId changes
+  React.useEffect(() => {
+    if (selectedDocumentId) {
+      const newSearchParams = new URLSearchParams(searchParams)
+      newSearchParams.set("documentId", selectedDocumentId)
+      router.replace(`/admin/comments?${newSearchParams.toString()}`, { scroll: false })
+    }
+  }, [selectedDocumentId, router, searchParams])
 
   // Filter data based on selected document
   const filteredData = React.useMemo(() => {
@@ -115,7 +134,7 @@ export function DataTable<TData, TValue>({
   }
 
   const table = useReactTable({
-    data: filteredData, // Use filtered data
+    data: filteredData,
     columns,
     state: {
       sorting,
