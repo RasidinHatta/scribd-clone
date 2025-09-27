@@ -14,9 +14,8 @@ const Page = async () => {
     const userId= session?.user?.id as string
     const documents = await getMyDocuments(userId) as [];
     const action = session ? true : false
-    const upload = session ? true : false
 
-    return <CommunityPage documents={documents} showActions={action} showUpload={upload}/>;
+    return <CommunityPage documents={documents} showActions={action}/>;
 };
 
 export default Page

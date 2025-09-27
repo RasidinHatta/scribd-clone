@@ -37,7 +37,7 @@ const Page = async ({
       )
     : documents;
 
-  return <CommunityPage documents={filteredDocuments} showUpload={upload} />;
+  return <CommunityPage documents={filteredDocuments} />;
 };
 
 export default Page

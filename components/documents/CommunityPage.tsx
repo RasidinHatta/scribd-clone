@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { useState } from 'react';
 import { AnimatedContainer } from '../landing/AnimatedContainer';
+import { programs } from '@/lib/schemas';
 
 interface Document {
   id: string;
@@ -29,24 +30,16 @@ interface Document {
 interface CommunityPageProps {
   documents: Document[];
   showActions?: boolean;
-  showUpload?: boolean;
 }
 
 const CommunityPage = ({
   documents = [],
   showActions = false,
-  showUpload = false
 }: CommunityPageProps) => {
   const [selectedSubject, setSelectedSubject] = useState<string>('all');
   
   // Define the specific subjects you want to include
-  const specificSubjects = [
-    'SECRH',
-    'SECVH',
-    'SECBH',
-    'SECPH',
-    'SECJH'
-  ];
+  const specificSubjects = programs
   
   // Get unique subjects from documents (filtering out null values)
   const documentSubjects = [...new Set(
@@ -85,12 +78,6 @@ const CommunityPage = ({
               ))}
             </SelectContent>
           </Select>
-          
-          {showUpload && (
-            <Button asChild className="w-full sm:w-auto text-secondary">
-              <Link href="/upload">Upload Document</Link>
-            </Button>
-          )}
         </div>
       </div>
       

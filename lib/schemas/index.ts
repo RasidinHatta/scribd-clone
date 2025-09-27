@@ -79,6 +79,14 @@ export const NewPasswordSchema = z.object({
  * - Optional description and file metadata fields
  * - Subject must be one of the specified enum values
  */
+export const programs = [
+    'Computer Science (Computer Networks and Security)',
+    'Computer Science (Graphics and Multimedia Software)',
+    'Computer Science (Data Management)',
+    'Computer Science (Information Systems)',
+    'Computer Science (Software Engineering)'
+] as const;
+
 export const DocumentSchema = z.object({
     title: z.string().min(1, {
         message: "Title is required",
@@ -87,8 +95,9 @@ export const DocumentSchema = z.object({
     publicId: z.string().optional(),
     format: z.string().optional(),
     resourceType: z.string().optional(),
-    subject: z.enum(["SECRH", "SECVH", "SECBH", "SECPH", "SECJH"]),
+    subject: z.enum(programs),
 });
+
 
 /**
  * User image upload schema:

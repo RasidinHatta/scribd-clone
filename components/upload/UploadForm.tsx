@@ -13,7 +13,7 @@ import {
 } from "../ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DocumentSchema } from "@/lib/schemas";
+import { DocumentSchema, programs } from "@/lib/schemas";
 import { useState, useRef } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { PlusIcon, X, XIcon } from "lucide-react";
+import { redirect } from "next/navigation";
 
 /**
  * UploadForm Component
@@ -59,7 +60,7 @@ const UploadForm = () => {
       publicId: "",
       format: "",
       resourceType: "",
-      subject: "SECRH", // Default to SECRH
+      subject: programs[0], // Default to SECRH
     },
   });
 
@@ -91,6 +92,7 @@ const UploadForm = () => {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+      redirect("/my-documents")
     }
 
     setLoading(false);
@@ -132,7 +134,7 @@ const UploadForm = () => {
               name="subject"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Subject</FormLabel>
+                  <FormLabel>Program</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -143,11 +145,9 @@ const UploadForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="SECRH">SECRH</SelectItem>
-                      <SelectItem value="SECVH">SECVH</SelectItem>
-                      <SelectItem value="SECBH">SECBH</SelectItem>
-                      <SelectItem value="SECPH">SECPH</SelectItem>
-                      <SelectItem value="SECJH">SECJH</SelectItem>
+                      {programs.map((program) => (
+                        <SelectItem key={program} value={program}>{program}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

@@ -95,7 +95,10 @@ const PDFCard = ({
           <CardDescription className="line-clamp-2">
             {description || "No description provided."}
           </CardDescription>
-          <Badge>{subject}</Badge>
+
+          <Badge>
+            <div className="text-secondary">{subject}</div>
+          </Badge>
 
           {showActions && (
             <div className="absolute top-4 right-4 hover:bg-primary rounded-md">
